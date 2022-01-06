@@ -56,5 +56,22 @@
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
+    <Folder Include="Tables" />
+    <Folder Include="Procedures" />
+    <Folder Include="Scripts" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Tables\Resource.sql" />
+    <Build Include="Procedures\sp_Resource_Read.sql" />
+    <Build Include="Procedures\sp_Resource_ReadList.sql" />
+    <Build Include="Procedures\sp_Resource_Create.sql" />
+    <Build Include="Procedures\sp_Resource_Update.sql" />
+    <Build Include="Procedures\sp_Resource_Delete.sql" />
+    <Build Include="Tables\ErrorLog.sql" />
+    <Build Include="Tables\ErrorLogTrace.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ContentManager.DB.publish.xml" />
+    <None Include="Scripts\Create_Resources.sql" />
   </ItemGroup>
 </Project>
