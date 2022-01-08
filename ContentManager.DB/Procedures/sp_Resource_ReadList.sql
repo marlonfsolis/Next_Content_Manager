@@ -18,7 +18,10 @@ BEGIN TRY
 	--DECLARE @offsetRows INT = 0
 	--	   ,@fetchRows INT = 10
 	--	   ,@filterJson VARCHAR(MAX) = '{
-	--		"title": "Title 1"
+	--			"priority": "4"
+	--	   }'
+	--	   ,@searchJson VARCHAR(MAX) = '{
+	--			"title": "%1%"
 	--	   }'
 	--	   ,@errorCode INT = 0
 	--	   ,@errorLogId INT = 0	
@@ -41,6 +44,7 @@ BEGIN TRY
 									'@offset: ' + ISNULL(CAST(@offsetRows AS VARCHAR), 'NULL') + ' || ' +
 									'@limit: ' + ISNULL(CAST(@fetchRows AS VARCHAR), 'NULL') + ' || ' +
 									'@filterJson: ' + ISNULL(CAST(@filterJson AS VARCHAR), 'NULL') + ' || ' +
+									'@searchJson: ' + ISNULL(CAST(@searchJson AS VARCHAR), 'NULL') + ' || ' +
 									'ProfileId: ' + ISNULL(CAST(0 AS VARCHAR), 'NULL')
 									, GETDATE())
 
@@ -58,9 +62,17 @@ BEGIN TRY
 		;THROW 51000, 'The params offsetRows and fetchRows cannot be negative.', 1;
 	END
 
-	IF ISJSON(@filterJson) = 0 
+	IF ISNULL(@filterJson,'') != ''
+		AND ISJSON(@filterJson) = 0
+	BEGIN
+		;
+		THROW 51000, 'The filterJson param is not a valid JSON.', 1;
+	END
+
+	IF ISNULL(@searchJson,'') != '' 
+		AND ISJSON(@filterJson) = 0 
 	BEGIN  
-		;THROW 51000, 'The filterJason param is not a valid JSON.' , 1;
+		;THROW 51000, 'The searchJson param is not a valid JSON.' , 1;
     END
     
 	--------------------------------
@@ -81,71 +93,47 @@ BEGIN TRY
     END
 
 
-	-- Get the columns to filter on
-	IF OBJECT_ID('tempdb.dbo.#jsonFields') IS NOT NULL
-    	DROP TABLE #jsonFields
-	SELECT
-		[key]
-	   ,[value]
-	INTO #jsonFields
-	FROM OPENJSON(@filterJson)  
+	-- Get the values to filter on
+	DECLARE @title_filter VARCHAR(500)
+		   ,@description_filter VARCHAR(1000)
+		   ,@link_filter VARCHAR(500)
+		   ,@imageUrl_filter VARCHAR(500)
+		   ,@priority_filter INT
+		   ,@timeToFinish_filter INT
+		   ,@active_filter BIT
+		   ,@createdAt_filter DATETIME
+   SELECT
+	   @title_filter = JSON_VALUE(@filterJson, '$.title')
+	  ,@description_filter = JSON_VALUE(@filterJson, '$.description')
+	  ,@link_filter = JSON_VALUE(@filterJson, '$.link')
+	  ,@imageUrl_filter = JSON_VALUE(@filterJson, '$.imageUrl')
+	  ,@priority_filter = JSON_VALUE(@filterJson, '$.priority')
+	  ,@timeToFinish_filter = JSON_VALUE(@filterJson, '$.timeToFinish')
+	  ,@active_filter = JSON_VALUE(@filterJson, '$.active')
+	  ,@createdAt_filter = JSON_VALUE(@filterJson, '$.createdAt')
 
-	DECLARE @title VARCHAR(500)
-		   ,@description VARCHAR(1000)
-		   ,@link VARCHAR(500)
-		   ,@imageUrl VARCHAR(500)
-		   ,@priority INT
-		   ,@timeToFinish INT
-		   ,@active BIT
-		   ,@createdAt DATETIME
-    
-	DECLARE @key VARCHAR(500)
-		   ,@value VARCHAR(MAX)
-    DECLARE cursor_jsonfield CURSOR STATIC FORWARD_ONLY READ_ONLY LOCAL FOR
-		SELECT
-			f.[key]
-		   ,f.[value]
-		FROM dbo.#jsonFields f
-    
-    OPEN cursor_jsonfield
-    
-    WHILE 1 = 1 BEGIN
-    	FETCH NEXT FROM cursor_jsonfield INTO @key, @value
-    
-    	IF @@fetch_status != 0
-    		BREAK
-    	
-    	IF @key = 'title' BEGIN  
-        	SET @title = @value
-        END
-		IF @key = 'description' BEGIN  
-        	SET @description = @value
-        END
-        IF @key = 'link' BEGIN  
-        	SET @link = @value
-        END
-		IF @key = 'imageUrl' BEGIN  
-        	SET @imageUrl = @value
-        END
-		IF @key = 'priority' BEGIN  
-        	SET @priority = @value
-        END
-        IF @key = 'timeToFinish' BEGIN  
-        	SET @timeToFinish = @value
-        END
-        IF @key = 'active' BEGIN  
-        	SET @active = @value
-        END
-        IF @key = 'createdAt' BEGIN  
-        	SET @createdAt = @value
-        END
-        
-    END
-    
-    CLOSE cursor_jsonfield
-    DEALLOCATE cursor_jsonfield
-    
 
+	-- Get the values to search on
+	DECLARE @title_search VARCHAR(500)
+		   ,@description_search VARCHAR(1000)
+		   ,@link_search VARCHAR(500)
+		   ,@imageUrl_search VARCHAR(500)
+		   ,@priority_search INT
+		   ,@timeToFinish_search INT
+		   ,@active_search BIT
+		   ,@createdAt_search DATETIME
+   SELECT
+	   @title_search = JSON_VALUE(@searchJson, '$.title')
+	  ,@description_search = JSON_VALUE(@searchJson, '$.description')
+	  ,@link_search = JSON_VALUE(@searchJson, '$.link')
+	  ,@imageUrl_search = JSON_VALUE(@searchJson, '$.imageUrl')
+	  ,@priority_search = JSON_VALUE(@searchJson, '$.priority')
+	  ,@timeToFinish_search = JSON_VALUE(@searchJson, '$.timeToFinish')
+	  ,@active_search = JSON_VALUE(@searchJson, '$.active')
+	  ,@createdAt_search = JSON_VALUE(@searchJson, '$.createdAt')
+
+
+	-- Get the final result
 	SELECT
 		r.ResourceId
 	   ,r.Title
@@ -157,14 +145,27 @@ BEGIN TRY
 	   ,r.Active
 	   ,r.CreatedAt
 	FROM [Resource] r
-	WHERE (@title IS NULL OR r.Title = @title)
-	AND (@description IS NULL OR r.Description = @description)
-	AND (@link IS NULL OR r.Link = @link)
-	AND (@imageUrl IS NULL OR r.ImageUrl = @imageUrl)
-	AND (@priority IS NULL OR r.Priority = @priority)
-	AND (@timeToFinish IS NULL OR r.TimeToFinish = @timeToFinish)
-	AND (@active IS NULL OR r.Active = @active)
-	AND (@createdAt IS NULL OR r.CreatedAt = @createdAt)
+
+	-- filter
+	WHERE (@title_filter IS NULL OR r.Title = @title_filter)
+	AND (@description_filter IS NULL OR r.Description = @description_filter)
+	AND (@link_filter IS NULL OR r.Link = @link_filter)
+	AND (@imageUrl_filter IS NULL OR r.ImageUrl = @imageUrl_filter)
+	AND (@priority_filter IS NULL OR r.Priority = @priority_filter)
+	AND (@timeToFinish_filter IS NULL OR r.TimeToFinish = @timeToFinish_filter)
+	AND (@active_filter IS NULL OR r.Active = @active_filter)
+	AND (@createdAt_filter IS NULL OR r.CreatedAt = @createdAt_filter)
+
+	-- search
+	AND (@title_search IS NULL OR r.Title LIKE @title_search)
+	AND (@description_search IS NULL OR r.Description LIKE @description_search)
+	AND (@link_search IS NULL OR r.Link LIKE @link_search)
+	AND (@imageUrl_search IS NULL OR r.ImageUrl LIKE @imageUrl_search)
+	AND (@priority_search IS NULL OR r.Priority LIKE @priority_search)
+	AND (@timeToFinish_search IS NULL OR r.TimeToFinish LIKE @timeToFinish_search)
+	AND (@active_search IS NULL OR r.Active LIKE @active_search)
+	AND (@createdAt_search IS NULL OR r.CreatedAt LIKE @createdAt_search)
+
 	ORDER BY r.ResourceId
 	OFFSET @offsetRows ROWS
 	FETCH NEXT @fetchRows ROWS ONLY
