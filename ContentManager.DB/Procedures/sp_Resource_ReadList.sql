@@ -9,6 +9,7 @@ CREATE PROCEDURE [dbo].[sp_Resource_ReadList]
 	@offsetRows INT = 0,
 	@fetchRows INT = 10,
 	@filterJson VARCHAR(MAX),
+	@searchJson VARCHAR(MAX),
 	@errorCode INT = 0 OUTPUT,
 	@errorLogId INT = 0 OUTPUT
 AS
