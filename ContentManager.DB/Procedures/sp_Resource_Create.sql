@@ -24,7 +24,7 @@ BEGIN TRY
 
 
 	-- Local variables
-	DECLARE @ProcedureName VARCHAR(100) = 'sp_Resource_Delete'
+	DECLARE @ProcedureName VARCHAR(100) = 'sp_Resource_Create'
 	DECLARE @LogMessage TABLE(LogMessage VARCHAR(MAX), LogDate DATETIME)
 	DECLARE @ErrorMsg VARCHAR(500)
 	DECLARE @LocalTranStarted bit = 0
@@ -90,11 +90,31 @@ BEGIN TRY
 END TRY
 
 BEGIN CATCH
-    SET @ErrorMsg = 'STORED PROC ERROR'
+	-- Rollback any changes if error occurs only when local transaction has occurred
+	IF @LocalTranStarted = 1 and @@TRANCOUNT > 0
+	BEGIN
+		ROLLBACK TRANSACTION @ProcedureName
+	END
+
+	SET @ErrorMsg = 'STORED PROC ERROR'
 	+ ' - PROC: ' + ISNULL(@ProcedureName, 'N/A')
-	+ ' - LINE: ' + CAST(ISNULL(ERROR_LINE(), 0) as varchar)
+	+ ' - LINE: ' + CAST(ISNULL(ERROR_LINE(), 0) AS VARCHAR(50))
 	+ ' - MSG: ' + ERROR_MESSAGE()
 
-		INSERT INTO ErrorLog (ErrorMessage, ErrorDetails, ErrorDate)
-	VALUES (@ErrorMsg, '', GETDATE());
+
+	-- Write Error logs kept through SP
+	INSERT INTO ErrorLog (ErrorMessage, ErrorDetails, StackTrace, ErrorDate)
+		VALUES (@errorMsg, '', '', GETDATE())
+
+	SELECT @errorLogId = SCOPE_IDENTITY()
+	INSERT INTO ErrorLogTrace (ErrorLogId, TraceMessage, TraceDate)
+		SELECT
+			@errorLogId
+		   ,LogMessage
+		   ,LogDate
+		FROM @LogMessage
+
+	-- Set @errorCode to 1 to return failure to UI
+	IF @errorCode = 0 
+		SET @errorCode = 1;
 END CATCH
