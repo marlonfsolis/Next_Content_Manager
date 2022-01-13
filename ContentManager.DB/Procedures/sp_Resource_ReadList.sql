@@ -198,7 +198,7 @@ BEGIN CATCH
 
 
 	-- Write Error logs kept through SP
-	INSERT INTO ErrorLog (ErrorMessage, ErrorDetails, StackTrace, ErrorDate)
+	INSERT INTO ErrorLog (ErrorMessage, ErrorDetail, StackTrace, ErrorDate)
 		VALUES (@errorMsg, '', '', GETDATE())
 
 	SELECT @errorLogId = SCOPE_IDENTITY()

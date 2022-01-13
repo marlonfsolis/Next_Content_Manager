@@ -2,7 +2,7 @@
 (
 	ErrorLogId INT NOT NULL PRIMARY KEY IDENTITY(1,1),
 	ErrorMessage VARCHAR(MAX),
-	ErrorDetails VARCHAR(MAX),
+	ErrorDetail VARCHAR(MAX),
     StackTrace VARCHAR(MAX) NULL,
 	ErrorDate DATETIME,
 )

@@ -1,22 +1,23 @@
 ﻿-- =============================================
 -- Author: Marlon Fernandez
--- Create date: 2022-01-08
--- Description:	Delete one resource by ResourceId
+-- Create date: 2021-09-01
+-- Description:	Create a record on ErrorLog
 -- Updates:
 -- Developer Name - Date - Description of the update
 -- =============================================
-CREATE PROCEDURE [dbo].[sp_Resource_Delete]
-	@resourceId INT = 0,
+CREATE PROCEDURE [dbo].[sp_ErrorLog_Write] 
+	@errorMessage VARCHAR(MAX),
+	@errorDetail VARCHAR(MAX) = '',
+	@stackTrace VARCHAR(MAX) = '',
 	@errorCode INT = 0 OUTPUT,
 	@errorLogId INT = 0 OUTPUT
 AS
 BEGIN TRY
 	SET NOCOUNT ON
 	SET @errorCode = 0
-	SET @errorLogId = 0
 
 	-- Local variables
-	DECLARE @ProcedureName VARCHAR(100) = 'sp_Resource_Delete'
+	DECLARE @ProcedureName VARCHAR(100) = 'sp_ErrorLog_Write'
 	DECLARE @LogMessage TABLE(LogMessage VARCHAR(MAX), LogDate DATETIME)
 	DECLARE @ErrorMsg VARCHAR(500)
 	DECLARE @LocalTranStarted bit = 0
@@ -24,7 +25,9 @@ BEGIN TRY
     INSERT INTO @LogMessage VALUES (@ProcedureName+' START', GETDATE())
 
 	INSERT INTO @LogMessage VALUES ('ParameterList:' +
-									'@resourceId: ' + ISNULL(CAST(@resourceId AS VARCHAR), 'NULL') + ' || ' +
+									'errorMessage: ' + ISNULL(CAST(@errorMessage AS VARCHAR), 'NULL') + ' || ' +
+									'errorDetail: ' + ISNULL(CAST(@errorDetail AS VARCHAR), 'NULL') + ' || ' +
+									'stackTrace: ' + ISNULL(CAST(@stackTrace AS VARCHAR), 'NULL') + ' || ' +
 									'ProfileId: ' + ISNULL(CAST(0 AS VARCHAR), 'NULL')
 									, GETDATE())
 
@@ -36,10 +39,11 @@ BEGIN TRY
 	INSERT INTO @LogMessage VALUES ('[PRE-VAL] START', GETDATE());
 	
 	-- Place the data validation here --
-	IF NOT EXISTS(SELECT 1 FROM Resource r WHERE r.ResourceId = @resourceId) 
-	BEGIN  
-		;THROW 51000, 'Resource not found' , 1;	
-    END
+	--IF @stackTrace IS NULL
+	--BEGIN
+	--	INSERT INTO @LogMessage VALUES ('[ERROR] stackTrace IS NULL', GETDATE())
+	--	;Throw 51000, '[ERROR] stackTrace IS NULL', 1
+	--END
 
 	--------------------------------
 	/* END PRE-VALIDATION SECTION */
@@ -54,7 +58,17 @@ BEGIN TRY
 	END
 
 
-	DELETE FROM Resource WHERE ResourceId = @resourceId
+	-- Write Error
+	INSERT INTO ErrorLog (ErrorMessage, ErrorDetail, StackTrace, ErrorDate)
+		VALUES (@errorMessage, @errorDetail, @stackTrace, GETDATE())
+
+	SELECT @errorLogId = SCOPE_IDENTITY()
+	INSERT INTO ErrorLogTrace (ErrorLogId, TraceMessage, TraceDate)
+		SELECT
+			@errorLogId
+		   ,LogMessage
+		   ,LogDate
+		FROM @LogMessage
 	
 
 

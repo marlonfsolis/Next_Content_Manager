@@ -69,6 +69,7 @@
     <Build Include="Procedures\sp_Resource_Delete.sql" />
     <Build Include="Tables\ErrorLog.sql" />
     <Build Include="Tables\ErrorLogTrace.sql" />
+    <Build Include="Procedures\sp_ErrorLog_Write.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ContentManager.DB.publish.xml" />
