@@ -23,6 +23,8 @@ services.AddSingleton<LinkService>();
 
 var app = builder.Build();
 
+
+
 // Configure the HTTP request pipeline.
 
 app.UseAuthorization();
