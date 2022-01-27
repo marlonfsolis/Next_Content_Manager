@@ -31,7 +31,7 @@ namespace ContentManager.API.Controllers
             var resources = tuple.Item2;
 
             var result = new Result<IList<Resources>>(resources, error);
-            LinkService.GenLink("getAuthors", result);
+            LinkService.GenLink("GetResources", result);
 
             if (error != null)
             {
