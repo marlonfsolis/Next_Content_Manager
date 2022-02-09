@@ -13,6 +13,16 @@ namespace ContentManager.API.Services
             ResourcesDAL = resourcesDAL;
         }
 
+        /// <summary>
+        /// Return a list of resource objects.
+        /// </summary>
+        /// <param name="resourcesRP">
+        ///     int Offset
+        ///     int Fetch
+        ///     string? Filter
+        ///     string? SearchQuery
+        /// </param>
+        /// <returns></returns>
         public async Task<Tuple<Error?, IList<Resources>>> GetResources(ResourcesRP resourcesRP)
         {
             var tuple = await ResourcesDAL.GetResources(resourcesRP);

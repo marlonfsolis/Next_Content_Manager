@@ -23,8 +23,13 @@ namespace ContentManager.API.Services
             }
         }
 
-        public void GenLink(string routeName, IResourceBase resource, object? routeValues = null)
+        public void GenLink(string routeName, IResourceBase resource, Dictionary<string,object>? routeValues = null)
         {
+            if (routeValues == null)
+            {
+                routeValues = new Dictionary<string, object>();
+            }
+
             var url = UrlHelper?.Link(routeName, routeValues);
             if (url != null && resource != null)
             {
@@ -32,8 +37,13 @@ namespace ContentManager.API.Services
             }
         }
 
-        public string GenLink(string routeName, object? routeValues = null)
+        public string GenLink(string routeName, Dictionary<string, object>? routeValues = null)
         {
+            if (routeValues == null)
+            {
+                routeValues = new Dictionary<string, object>();
+            }
+
             var url = UrlHelper?.Link(routeName, routeValues);
             return url != null ? url : String.Empty;
         }

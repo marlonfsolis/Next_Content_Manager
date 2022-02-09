@@ -41,7 +41,11 @@ namespace ContentManager.API.Controllers
             // generate link for each resource
             foreach (var resource in resources)
             {
-                LinkService.GenLink("GetResources", resource, new { resourceId = resource.ResourceId });
+                var routeValues = new Dictionary<string, object>()
+                {
+                    { "resourceId", resource.ResourceId }
+                };
+                LinkService.GenLink("GetResources", resource, routeValues);
             }
 
             return Ok(result);

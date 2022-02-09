@@ -1,6 +1,7 @@
 using ContentManager.API.Constants;
 using ContentManager.API.DAL;
 using ContentManager.API.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 
@@ -15,10 +16,11 @@ services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 services.AddSingleton<IUrlHelperFactory, UrlHelperFactory>();
 
-services.AddSingleton<ConnectionString>();
-services.AddSingleton<ResourcesDAL>();
-services.AddSingleton<ResourcesService>();
-services.AddSingleton<LinkService>();
+services.AddScoped<ConnectionString>();
+services.AddScoped<ResourcesDAL>();
+services.AddScoped<ResourcesService>();
+
+services.AddScoped<LinkService>();
 
 
 var app = builder.Build();
