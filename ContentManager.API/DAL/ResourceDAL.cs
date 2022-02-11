@@ -113,6 +113,33 @@ namespace ContentManager.API.DAL
             }
         }
 
+        public async Task<Tuple<Error?, Resource?>> DeleteResource(int resourceId)
+        {
+            var errorCode = 0;
+            var errorLogId = 0;
+            Error? error = null;
 
+            var dbPath = ConnectionString.ContentManagerDB;
+            using (var conn = new SqlConnection(dbPath))
+            {
+                var dynParams = new DynamicParameters();
+                dynParams.Add("@resourceId", resourceId);
+                dynParams.Add("@errorCode", errorCode, direction: ParameterDirection.Output);
+                dynParams.Add("@errorLogId", errorLogId, direction: ParameterDirection.Output);
+
+                var sql = "sp_Resource_Delete";
+                var result = await conn
+                    .QueryFirstOrDefaultAsync<Resource>(sql, dynParams, commandType: CommandType.StoredProcedure);
+
+                errorCode = dynParams.Get<int>("@errorCode");
+                errorLogId = dynParams.Get<int>("@errorLogId");
+                if (errorCode > 0)
+                {
+                    error = new Error(errorCode, errorLogId);
+                }
+
+                return new Tuple<Error?, Resource?>(error, result);
+            }
+        }
     }
 }

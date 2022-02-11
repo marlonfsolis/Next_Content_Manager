@@ -54,15 +54,46 @@ BEGIN TRY
 	END
 
 
+	-- Save the resource before delete to return later
+	SELECT
+		r.ResourceId
+	   ,r.Title
+	   ,r.Description
+	   ,r.Link
+	   ,r.ImageUrl
+	   ,r.Priority
+	   ,r.TimeToFinish
+	   ,r.Active
+	   ,r.CreatedAt
+	INTO #resource_save
+	FROM Resource r
+	WHERE r.ResourceId = @resourceId
+
+
+	-- delete the resource
 	DELETE FROM Resource WHERE ResourceId = @resourceId
 	
 
 
-	-- Commit transaction
+	-- Commint transaction
 	IF @LocalTranStarted = 1 and @@TRANCOUNT > 0	
 	BEGIN
 		COMMIT TRANSACTION @ProcedureName		
 	END
+
+
+	-- Return the resource
+	SELECT
+		rs.ResourceId
+	   ,rs.Title
+	   ,rs.Description
+	   ,rs.Link
+	   ,rs.ImageUrl
+	   ,rs.Priority
+	   ,rs.TimeToFinish
+	   ,rs.Active
+	   ,rs.CreatedAt
+	FROM #resource_save rs
 
 
 	INSERT INTO @LogMessage VALUES (@ProcedureName+' END', GETDATE())

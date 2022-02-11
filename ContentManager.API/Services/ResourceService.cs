@@ -66,11 +66,26 @@ namespace ContentManager.API.Services
                 case 1:
                     error = new Error(StatusCodes.Status500InternalServerError, error.ErrorLogId, "Database error on sp_Resource_Create");
                     break;
+
             }
 
             return new Tuple<Error?, Resource?>(error, resource);
         }
 
+        public async Task<Tuple<Error?, Resource?>> DeleteResource(int resourceId)
+        {
+            var tuple = await ResourceDAL.DeleteResource(resourceId);
+            var error = tuple.Item1;
+            var resource = tuple.Item2;
 
+            switch (error?.Code)
+            {
+                case 1:
+                    error = new Error(StatusCodes.Status500InternalServerError, error.ErrorLogId, "Database error on sp_Resource_Delete");
+                    break;
+            }
+
+            return new Tuple<Error?, Resource?>(error, resource);
+        }
     }
 }

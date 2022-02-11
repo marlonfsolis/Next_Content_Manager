@@ -100,5 +100,30 @@ namespace ContentManager.API.Controllers
             return Ok(result);
         }
 
+        [HttpDelete]
+        [Route("{resourceId}", Name = "DeleteResource")]
+        public async Task<ActionResult<Result<Resource>>> DeleteResource([FromRoute] int resourceId)
+        {
+            var tuple = await ResourceService.DeleteResource(resourceId);
+            var error = tuple.Item1;
+            var resource = tuple.Item2;
+
+            var result = new Result<Resource?>(resource, error);
+            var routeValues = new Dictionary<string, object>()
+            {
+                { "resourceId", resourceId }
+            };
+            LinkService.GenLink("GetResource", result, routeValues);
+
+            if (error != null)
+            {
+                return StatusCode(error.Code, result);
+            }
+
+
+            LinkService.GenLink("GetResource", resource, routeValues);
+
+            return Ok(result);
+        }
     }
 }
