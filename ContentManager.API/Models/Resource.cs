@@ -1,6 +1,6 @@
 ﻿namespace ContentManager.API.Models
 {
-    public class Resources : IResourceBase
+    public class Resource : IResourceBase
     {
         public int ResourceId { get; set; }
         public string? Title { get; set; }

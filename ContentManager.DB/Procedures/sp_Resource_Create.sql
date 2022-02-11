@@ -28,6 +28,7 @@ BEGIN TRY
 	DECLARE @LogMessage TABLE(LogMessage VARCHAR(MAX), LogDate DATETIME)
 	DECLARE @ErrorMsg VARCHAR(500)
 	DECLARE @LocalTranStarted bit = 0
+	DECLARE @newResource INT = 0
 
 
     INSERT INTO @LogMessage VALUES (@ProcedureName+' START', GETDATE())
@@ -77,12 +78,28 @@ BEGIN TRY
 	INSERT INTO Resource (Title, Description, Link, ImageUrl, Priority, TimeToFinish, Active, CreatedAt)
 	VALUES (@title, @description, @link, @imageUrl, @priority, @timeToFinish, @active, @createdAt);
 
+	SELECT @newResource = SCOPE_IDENTITY()
 
-	-- Commint transaction
+	-- Commit transaction
 	IF @LocalTranStarted = 1 and @@TRANCOUNT > 0	
 	BEGIN
 		COMMIT TRANSACTION @ProcedureName		
 	END
+
+
+	-- Return new resource created
+	SELECT
+		r.ResourceId
+	   ,r.Title
+	   ,r.Description
+	   ,r.Link
+	   ,r.ImageUrl
+	   ,r.Priority
+	   ,r.TimeToFinish
+	   ,r.Active
+	   ,r.CreatedAt
+	FROM Resource r
+	WHERE r.ResourceId = @newResource
 
 
 	INSERT INTO @LogMessage VALUES (@ProcedureName+' END', GETDATE())

@@ -72,7 +72,7 @@ BEGIN TRY
 	
 
 
-	-- Commint transaction
+	-- Commit transaction
 	IF @LocalTranStarted = 1 and @@TRANCOUNT > 0	
 	BEGIN
 		COMMIT TRANSACTION @ProcedureName		

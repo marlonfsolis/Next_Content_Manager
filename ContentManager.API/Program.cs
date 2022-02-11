@@ -17,8 +17,8 @@ services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 services.AddSingleton<IUrlHelperFactory, UrlHelperFactory>();
 
 services.AddScoped<ConnectionString>();
-services.AddScoped<ResourcesDAL>();
-services.AddScoped<ResourcesService>();
+services.AddScoped<ResourceDAL>();
+services.AddScoped<ResourceService>();
 
 services.AddScoped<LinkService>();
 

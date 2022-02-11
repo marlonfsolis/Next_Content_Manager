@@ -23,7 +23,10 @@ namespace ContentManager.API.Services
             }
         }
 
-        public void GenLink(string routeName, IResourceBase resource, Dictionary<string,object>? routeValues = null)
+        public void GenLink(
+            string routeName, 
+            IResourceBase? resource = null, 
+            Dictionary<string,object>? routeValues = null)
         {
             if (routeValues == null)
             {
