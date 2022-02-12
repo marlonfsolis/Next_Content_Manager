@@ -99,7 +99,8 @@ namespace ContentManager.API.Services
                     error.SetErrorResponseValues(StatusCodes.Status500InternalServerError, "Database error on sp_Resource_Delete");
                     break;
                 case "401":
-                    error.SetErrorResponseValues(StatusCodes.Status400BadRequest, "Resource not found");
+                    var value = new { resourceId };
+                    error.SetErrorResponseValues(StatusCodes.Status400BadRequest, "Resource not found", value);
                     break;
             }
 
