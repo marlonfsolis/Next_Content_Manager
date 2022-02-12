@@ -10,7 +10,7 @@ CREATE PROCEDURE [dbo].[sp_Resource_ReadList]
 	@fetchRows INT = 10,
 	@filterJson VARCHAR(MAX),
 	@searchJson VARCHAR(MAX),
-	@errorCode INT = 0 OUTPUT,
+	@errorCode VARCHAR(50) = '' OUTPUT,
 	@errorLogId INT = 0 OUTPUT
 AS
 BEGIN TRY
@@ -29,7 +29,7 @@ BEGIN TRY
 	
 	
 	SET NOCOUNT ON
-	SET @errorCode = 0
+	SET @errorCode = ''
 	SET @errorLogId = 0
 
 
@@ -55,27 +55,31 @@ BEGIN TRY
 	----------------------------
 
 	INSERT INTO @LogMessage VALUES ('[PRE-VAL] START', GETDATE());
-	SET @errorCode = 2
 
 	IF @offsetRows < 0
 		OR @fetchRows < 0
 	BEGIN
-		;THROW 51000, 'The params offsetRows and fetchRows cannot be negative.', 1;
+		SET @errorCode = '401';
+		INSERT INTO @LogMessage VALUES ('[ERROR] The params offsetRows and fetchRows cannot be negative.', GETDATE());		
+		THROW 51000, 'The params offsetRows and fetchRows cannot be negative.', 1;
 	END
 
 	IF ISNULL(@filterJson,'') != ''
 		AND ISJSON(@filterJson) = 0
 	BEGIN
-		;THROW 51000, 'The filterJson param is not a valid JSON.', 1;
+		SET @errorCode = '402';
+		INSERT INTO @LogMessage VALUES ('[ERROR] The filterJson param is not a valid JSON.', GETDATE());	
+		THROW 51000, 'The filterJson param is not a valid JSON.', 1;
 	END
 
 	IF ISNULL(@searchJson,'') != '' 
 		AND ISJSON(@filterJson) = 0 
 	BEGIN  
-		;THROW 51000, 'The searchJson param is not a valid JSON.' , 1;
+		SET @errorCode = '403';
+		INSERT INTO @LogMessage VALUES ('[ERROR] The searchJson param is not a valid JSON.', GETDATE());		
+		THROW 51000, 'The searchJson param is not a valid JSON.' , 1;
     END
     
-	SET @errorCode = 0
 	--------------------------------
 	/* END PRE-VALIDATION SECTION */
 	--------------------------------
@@ -221,7 +225,7 @@ BEGIN CATCH
 		FROM @LogMessage
 
 	-- Set @errorCode to 1 to return failure to UI
-	IF @errorCode = 0 
-		SET @errorCode = 1;
+	IF @errorCode = '' 
+		SET @errorCode = '500';
 
 END CATCH

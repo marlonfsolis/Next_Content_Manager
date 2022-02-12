@@ -18,7 +18,7 @@ namespace ContentManager.API.DAL
 
         public async Task<Tuple<Error?, IList<Resource>>> GetResources(ResourceRP resourcesRP)
         {
-            var errorCode = 0;
+            var errorCode = "";
             var errorLogId = 0;
             Error? error = null;
 
@@ -37,9 +37,9 @@ namespace ContentManager.API.DAL
                 var result = await conn
                     .QueryAsync<Resource>(sql, dynParams, commandType: CommandType.StoredProcedure);
 
-                errorCode = dynParams.Get<int>("@errorCode");
+                errorCode = dynParams.Get<string>("@errorCode");
                 errorLogId = dynParams.Get<int>("@errorLogId");
-                if (errorCode > 0)
+                if (errorCode != "")
                 {
                     error = new Error(errorCode, errorLogId);
                 }
@@ -50,7 +50,7 @@ namespace ContentManager.API.DAL
 
         public async Task<Tuple<Error?, Resource?>> GetResource(int resourceId)
         {
-            var errorCode = 0;
+            var errorCode = "";
             var errorLogId = 0;
             Error? error = null;
 
@@ -66,9 +66,9 @@ namespace ContentManager.API.DAL
                 var result = await conn
                     .QueryFirstOrDefaultAsync<Resource>(sql, dynParams, commandType: CommandType.StoredProcedure);
 
-                errorCode = dynParams.Get<int>("@errorCode");
+                errorCode = dynParams.Get<string>("@errorCode");
                 errorLogId = dynParams.Get<int>("@errorLogId");
-                if (errorCode > 0)
+                if (errorCode != "")
                 {
                     error = new Error(errorCode, errorLogId);
                 }
@@ -79,7 +79,7 @@ namespace ContentManager.API.DAL
 
         public async Task<Tuple<Error?, Resource?>> CreateResource(CreateResourceRP createResourceRP)
         {
-            var errorCode = 0;
+            var errorCode = "";
             var errorLogId = 0;
             Error? error = null;
 
@@ -102,9 +102,9 @@ namespace ContentManager.API.DAL
                 var result = await conn
                     .QueryFirstOrDefaultAsync<Resource>(sql, dynParams, commandType: CommandType.StoredProcedure);
 
-                errorCode = dynParams.Get<int>("@errorCode");
+                errorCode = dynParams.Get<string>("@errorCode");
                 errorLogId = dynParams.Get<int>("@errorLogId");
-                if (errorCode > 0)
+                if (errorCode != "")
                 {
                     error = new Error(errorCode, errorLogId);
                 }
@@ -115,7 +115,7 @@ namespace ContentManager.API.DAL
 
         public async Task<Tuple<Error?, Resource?>> DeleteResource(int resourceId)
         {
-            var errorCode = 0;
+            var errorCode = "";
             var errorLogId = 0;
             Error? error = null;
 
@@ -131,9 +131,9 @@ namespace ContentManager.API.DAL
                 var result = await conn
                     .QueryFirstOrDefaultAsync<Resource>(sql, dynParams, commandType: CommandType.StoredProcedure);
 
-                errorCode = dynParams.Get<int>("@errorCode");
+                errorCode = dynParams.Get<string>("@errorCode");
                 errorLogId = dynParams.Get<int>("@errorLogId");
-                if (errorCode > 0)
+                if (errorCode != "")
                 {
                     error = new Error(errorCode, errorLogId);
                 }

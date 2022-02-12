@@ -19,7 +19,6 @@ services.AddSingleton<IUrlHelperFactory, UrlHelperFactory>();
 services.AddScoped<ConnectionString>();
 services.AddScoped<ResourceDAL>();
 services.AddScoped<ResourceService>();
-
 services.AddScoped<LinkService>();
 
 

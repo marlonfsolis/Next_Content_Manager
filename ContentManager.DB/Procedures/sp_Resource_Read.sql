@@ -7,12 +7,12 @@
 -- =============================================
 CREATE PROCEDURE [dbo].[sp_Resource_Read]
 	@resourceId INT = 0,
-	@errorCode INT = 0 OUTPUT,
+	@errorCode VARCHAR(50) = '' OUTPUT,
 	@errorLogId INT = 0 OUTPUT
 AS
 BEGIN TRY
 	SET NOCOUNT ON
-	SET @errorCode = 0
+	SET @errorCode = ''
 	SET @errorLogId = 0
 
 	-- Local variables
@@ -38,8 +38,9 @@ BEGIN TRY
 	-- Place the data validation here --
 	IF ISNULL(@resourceId,0) = 0
 	BEGIN
-		INSERT INTO @LogMessage VALUES ('[ERROR] resourceId IS NULL', GETDATE())
-		;Throw 51000, '[ERROR] resourceId IS NULL', 1
+		SET @errorCode = '401';
+		INSERT INTO @LogMessage VALUES ('[ERROR] resourceId IS NULL', GETDATE());
+		Throw 51000, '[ERROR] resourceId IS NULL', 1;
 	END
 
 	--------------------------------
@@ -106,7 +107,7 @@ BEGIN CATCH
 		FROM @LogMessage
 
 	-- Set @errorCode to 1 to return failure to UI
-	IF @errorCode = 0 
-		SET @errorCode = 1;
+	IF @errorCode = '' 
+		SET @errorCode = '500';
 
 END CATCH

@@ -35,7 +35,7 @@ namespace ContentManager.API.Controllers
 
             if (error != null)
             {
-                return StatusCode(error.Code, result);
+                return StatusCode(error.StatusCode, result);
             }
 
             // generate link for each resource
@@ -69,7 +69,7 @@ namespace ContentManager.API.Controllers
 
             if (error != null)
             {
-                return StatusCode(error.Code, result);
+                return StatusCode(error.StatusCode, result);
             }
 
             return Ok(result);
@@ -88,7 +88,7 @@ namespace ContentManager.API.Controllers
 
             if (error != null)
             {
-                return StatusCode(error.Code, result);
+                return StatusCode(error.StatusCode, result);
             }
 
             var routeValues = new Dictionary<string, object>()
@@ -117,7 +117,7 @@ namespace ContentManager.API.Controllers
 
             if (error != null)
             {
-                return StatusCode(error.Code, result);
+                return StatusCode(error.StatusCode, result);
             }
 
 

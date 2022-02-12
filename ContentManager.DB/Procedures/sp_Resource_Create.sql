@@ -14,12 +14,12 @@ CREATE PROCEDURE [dbo].[sp_Resource_Create]
 	@timeToFinish INT,
 	@active BIT,
 	@createdAt DATETIME,
-	@errorCode INT = 0 OUTPUT,
+	@errorCode VARCHAR(50) = '' OUTPUT,
 	@errorLogId INT = 0 OUTPUT
 AS
 BEGIN TRY
 	SET NOCOUNT ON
-	SET @errorCode = 0
+	SET @errorCode = ''
 	SET @errorLogId = 0
 
 
@@ -58,7 +58,8 @@ BEGIN TRY
     	FROM dbo.Resource r
 		WHERE r.Title = @title
     ) BEGIN
-		;THROW 51000, 'Resource already exist with this title' , 1;
+		SET @errorCode = '401';
+		THROW 51000, 'Resource already exist with this title' , 1;
     END
 
 	--------------------------------
@@ -132,6 +133,6 @@ BEGIN CATCH
 		FROM @LogMessage
 
 	-- Set @errorCode to 1 to return failure to UI
-	IF @errorCode = 0 
-		SET @errorCode = 1;
+	IF @errorCode = '' 
+		SET @errorCode = '500';
 END CATCH

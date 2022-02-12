@@ -7,12 +7,12 @@
 -- =============================================
 CREATE PROCEDURE [dbo].[sp_Resource_Delete]
 	@resourceId INT = 0,
-	@errorCode INT = 0 OUTPUT,
+	@errorCode VARCHAR(50) = '' OUTPUT,
 	@errorLogId INT = 0 OUTPUT
 AS
 BEGIN TRY
 	SET NOCOUNT ON
-	SET @errorCode = 0
+	SET @errorCode = ''
 	SET @errorLogId = 0
 
 	-- Local variables
@@ -38,7 +38,9 @@ BEGIN TRY
 	-- Place the data validation here --
 	IF NOT EXISTS(SELECT 1 FROM Resource r WHERE r.ResourceId = @resourceId) 
 	BEGIN  
-		;THROW 51000, 'Resource not found' , 1;	
+		SET @errorCode = '401';
+		INSERT INTO @LogMessage VALUES ('[ERROR] Resource not found', GETDATE());
+		THROW 51000, 'Resource not found' , 1;	
     END
 
 	--------------------------------
@@ -126,7 +128,7 @@ BEGIN CATCH
 		FROM @LogMessage
 
 	-- Set @errorCode to 1 to return failure to UI
-	IF @errorCode = 0 
-		SET @errorCode = 1;
+	IF @errorCode = '' 
+		SET @errorCode = '500';
 
 END CATCH

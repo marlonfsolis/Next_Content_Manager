@@ -9,12 +9,12 @@ CREATE PROCEDURE [dbo].[sp_ErrorLog_Write]
 	@errorMessage VARCHAR(MAX),
 	@errorDetail VARCHAR(MAX) = '',
 	@stackTrace VARCHAR(MAX) = '',
-	@errorCode INT = 0 OUTPUT,
+	@errorCode VARCHAR(50) = '' OUTPUT,
 	@errorLogId INT = 0 OUTPUT
 AS
 BEGIN TRY
 	SET NOCOUNT ON
-	SET @errorCode = 0
+	SET @errorCode = ''
 
 	-- Local variables
 	DECLARE @ProcedureName VARCHAR(100) = 'sp_ErrorLog_Write'
@@ -109,7 +109,7 @@ BEGIN CATCH
 		FROM @LogMessage
 
 	-- Set @errorCode to 1 to return failure to UI
-	IF @errorCode = 0 
-		SET @errorCode = 1;
+	IF @errorCode = '' 
+		SET @errorCode = '500';
 
 END CATCH
