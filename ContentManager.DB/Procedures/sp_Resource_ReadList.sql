@@ -8,8 +8,8 @@
 CREATE PROCEDURE [dbo].[sp_Resource_ReadList]
 	@offsetRows INT = 0,
 	@fetchRows INT = 10,
-	@filterJson VARCHAR(MAX),
-	@searchJson VARCHAR(MAX),
+	@filterJson VARCHAR(MAX) = '{}',
+	@searchJson VARCHAR(MAX) = '{}',
 	@errorCode VARCHAR(50) = '' OUTPUT,
 	@errorLogId INT = 0 OUTPUT
 AS
@@ -56,6 +56,18 @@ BEGIN TRY
 
 	INSERT INTO @LogMessage VALUES ('[PRE-VAL] START', GETDATE());
 
+	-- fix json strings
+	IF ISNULL(@filterJson,'') = '' 
+	BEGIN  
+		SET @filterJson = '{}'	
+    END
+
+	IF ISNULL(@searchJson,'') = '' 
+	BEGIN  
+		SET @searchJson = '{}'	
+    END  
+
+
 	IF @offsetRows < 0
 		OR @fetchRows < 0
 	BEGIN
@@ -64,16 +76,14 @@ BEGIN TRY
 		THROW 51000, 'The params offsetRows and fetchRows cannot be negative.', 1;
 	END
 
-	IF ISNULL(@filterJson,'') != ''
-		AND ISJSON(@filterJson) = 0
+	IF ISJSON(@filterJson) = 0
 	BEGIN
 		SET @errorCode = '402';
 		INSERT INTO @LogMessage VALUES ('[ERROR] The filterJson param is not a valid JSON.', GETDATE());	
 		THROW 51000, 'The filterJson param is not a valid JSON.', 1;
 	END
 
-	IF ISNULL(@searchJson,'') != '' 
-		AND ISJSON(@filterJson) = 0 
+	IF ISJSON(@filterJson) = 0 
 	BEGIN  
 		SET @errorCode = '403';
 		INSERT INTO @LogMessage VALUES ('[ERROR] The searchJson param is not a valid JSON.', GETDATE());		
@@ -97,17 +107,7 @@ BEGIN TRY
 	BEGIN  
     	SELECT @fetchRows = COUNT(1) FROM [Resource] r
     END
-
-	-- fix json strings
-	IF ISNULL(@filterJson,'') = '' 
-	BEGIN  
-		SET @filterJson = '{}'	
-    END
-
-	IF ISNULL(@searchJson,'') = '' 
-	BEGIN  
-		SET @searchJson = '{}'	
-    END    
+  
 
 	-- Get the values to filter on
 	DECLARE @title_filter VARCHAR(500)

@@ -28,6 +28,7 @@ namespace ContentManager.API.Services
             var tuple = await ResourceDAL.GetResources(resourceRP);
             var error = tuple.Item1;
             var authors = tuple.Item2;
+            object? value = null;
 
             switch (error?.Code)
             {
@@ -35,13 +36,16 @@ namespace ContentManager.API.Services
                     error.SetErrorResponseValues(StatusCodes.Status500InternalServerError, "Database error on sp_Resource_ReadList");
                     break;
                 case "401":
-                    error.SetErrorResponseValues(StatusCodes.Status400BadRequest, "The params offsetRows and fetchRows cannot be negative.");
+                    value = new { Offset = resourceRP.Offset, Fetch = resourceRP.Fetch };
+                    error.SetErrorResponseValues(StatusCodes.Status400BadRequest, "The params Offset and Fetch cannot be negative.", value);
                     break;
                 case "402":
-                    error.SetErrorResponseValues(StatusCodes.Status400BadRequest, "The filterJson param is not a valid JSON.");
+                    value = new { Filter = resourceRP.Filter };
+                    error.SetErrorResponseValues(StatusCodes.Status400BadRequest, "The filterJson param is not a valid JSON.", value);
                     break;
                 case "403":
-                    error.SetErrorResponseValues(StatusCodes.Status400BadRequest, "The searchJson param is not a valid JSON.");
+                    value = new { SearchQuery = resourceRP.SearchQuery };
+                    error.SetErrorResponseValues(StatusCodes.Status400BadRequest, "The searchJson param is not a valid JSON.", value);
                     break;
             }
 
@@ -80,8 +84,8 @@ namespace ContentManager.API.Services
                     error.SetErrorResponseValues(StatusCodes.Status500InternalServerError, "Database error on sp_Resource_Create");
                     break;
                 case "401":
-                    var title = resource?.Title;
-                    error.SetErrorResponseValues(StatusCodes.Status400BadRequest, "Resource already exist with this title", title);
+                    var value = new { title = createResourceRP.Title };
+                    error.SetErrorResponseValues(StatusCodes.Status400BadRequest, "Resource already exist with this title", value);
                     break;
             }
 
