@@ -36,11 +36,16 @@ BEGIN TRY
 	INSERT INTO @LogMessage VALUES ('[PRE-VAL] START', GETDATE());
 	
 	-- Place the data validation here --
-	IF ISNULL(@resourceId,0) = 0
+	IF NOT EXISTS (
+		SELECT 
+			1
+		FROM Resource r
+		WHERE r.ResourceId = ISNULL(@resourceId,0)
+	)
 	BEGIN
 		SET @errorCode = '401';
-		INSERT INTO @LogMessage VALUES ('[ERROR] resourceId IS NULL', GETDATE());
-		Throw 51000, '[ERROR] resourceId IS NULL', 1;
+		INSERT INTO @LogMessage VALUES ('[ERROR] Resource not found', GETDATE());
+		Throw 51000, '[ERROR] Resource not found', 1;
 	END
 
 	--------------------------------

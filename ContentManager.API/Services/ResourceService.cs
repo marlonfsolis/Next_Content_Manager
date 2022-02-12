@@ -60,7 +60,8 @@ namespace ContentManager.API.Services
                     error.SetErrorResponseValues(StatusCodes.Status500InternalServerError, "Database error on sp_Resource_Read");
                     break;
                 case "401":
-                    error.SetErrorResponseValues(StatusCodes.Status400BadRequest, "ResourceId IS NULL");
+                    var value = new { resourceId };
+                    error.SetErrorResponseValues(StatusCodes.Status400BadRequest, "Resource not found", value);
                     break;
             }
 
