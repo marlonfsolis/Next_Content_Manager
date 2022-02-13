@@ -1,4 +1,5 @@
 import React from "react";
+import Link from 'next/link'
 
 const Navbar = () => {
   return (
@@ -7,7 +8,9 @@ const Navbar = () => {
         <div className="container">
           <div className="navbar-brand">
             <a className="navbar-item" href="../">
-              <h1>Content Manager</h1>
+              <h1 className="is-size-4 is-uppercase">
+                <Link href="/">Content Manager</Link>
+              </h1>
             </a>
             <span className="navbar-burger burger" data-target="navbarMenu">
               <span></span>
@@ -17,17 +20,12 @@ const Navbar = () => {
           </div>
           <div id="navbarMenu" className="navbar-menu">
             <div className="navbar-end">
-              <div className=" navbar-item">
-                <div className="control has-icons-left">
-                  <input className="input is-rounded" type="email" placeholder="Search" />
-                  <span className="icon is-left">
-                    <i className="fa fa-search"></i>
-                  </span>
-                </div>
+              <div className="navbar-item is-active is-size-5 has-text-weight-semibold">
+                <Link href="/">Home</Link>                
               </div>
-              <a className="navbar-item is-active is-size-5 has-text-weight-semibold">Home</a>
-              <a className="navbar-item is-size-5 has-text-weight-semibold">Examples</a>
-              <a className="navbar-item is-size-5 has-text-weight-semibold">Features</a>
+              <div className="navbar-item is-size-5 has-text-weight-semibold">
+                <Link href="/about">About</Link>
+              </div>
             </div>
           </div>
         </div>
