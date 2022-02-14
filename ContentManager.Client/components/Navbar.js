@@ -7,11 +7,11 @@ const Navbar = () => {
       <nav className="navbar">
         <div className="container">
           <div className="navbar-brand">
-            <a className="navbar-item" href="../">
+            <div className="navbar-item">
               <h1 className="is-size-4 is-uppercase">
                 <Link href="/">Content Manager</Link>
               </h1>
-            </a>
+            </div>
             <span className="navbar-burger burger" data-target="navbarMenu">
               <span></span>
               <span></span>
