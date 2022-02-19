@@ -2,7 +2,7 @@ import React from 'react'
 
 const Newsletter = () => {
   return (
-    <div>
+    <>
       <section className="section">
         <div className="columns">
           <div className="column is-10 is-offset-1">
@@ -26,7 +26,7 @@ const Newsletter = () => {
           </div>
         </div>
       </section>      
-    </div>
+    </>
   )
 }
 

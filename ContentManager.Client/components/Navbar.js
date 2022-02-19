@@ -3,8 +3,8 @@ import Link from 'next/link'
 
 const Navbar = () => {
   return (
-    <div>
-      <nav className="navbar">
+    <>
+      <nav className="navbar is-dark" role="navigation">
         <div className="container">
           <div className="navbar-brand">
             <div className="navbar-item">
@@ -12,7 +12,7 @@ const Navbar = () => {
                 <Link href="/">Content Manager</Link>
               </h1>
             </div>
-            <span className="navbar-burger burger" data-target="navbarMenu">
+            <span role="button" className="navbar-burger burger" data-target="navbarMenu">
               <span></span>
               <span></span>
               <span></span>
@@ -20,17 +20,21 @@ const Navbar = () => {
           </div>
           <div id="navbarMenu" className="navbar-menu">
             <div className="navbar-end">
-              <div className="navbar-item is-active is-size-5 has-text-weight-semibold">
-                <Link href="/">Home</Link>                
-              </div>
-              <div className="navbar-item is-size-5 has-text-weight-semibold">
-                <Link href="/about">About</Link>
-              </div>
+              <Link href="/" passHref>
+                <a className="navbar-item is-active is-size-5 has-text-weight-semibold">
+                  Home
+                </a>
+              </Link>
+              <Link href="/" passHref>
+                <a className="navbar-item is-size-5 has-text-weight-semibold">
+                About
+                </a>
+              </Link>            
             </div>
           </div>
         </div>
-      </nav>
-    </div>
+      </nav>    
+    </>
   );
 };
 

@@ -3,17 +3,17 @@ import moment from 'moment';
 
 export default function ResourceHiglight ({ resources }) {
   return (
-    <div>
+    <>
       <section className="hero ">
         <div className="hero-body">
-          <div className="container">
+          <div className="container is-fluid">
             {
               resources.map((r) => {
                 const today = new Date();
                 const subtitle = moment(r.createdAt).format('MMMM Do YYYY');
                 
                 return (
-                  <section key={r.id} className="section">
+                  <section key={r.id} className="section is-small">
                     <div className="columns">
                       <div className="column is-8 is-offset-2">
                         <div className="content is-medium">
@@ -32,6 +32,6 @@ export default function ResourceHiglight ({ resources }) {
           </div>
         </div>
       </section>
-    </div>
+    </>
   );
 }

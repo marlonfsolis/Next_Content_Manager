@@ -2,7 +2,7 @@ import React from 'react'
 
 const Footer = () => {
   return (
-    <div>
+    <>
       <footer className="footer">
         <div className="content has-text-centered">
           <p>
@@ -12,7 +12,7 @@ const Footer = () => {
           </p>
         </div>
       </footer>      
-    </div>
+    </>
   )
 }
 

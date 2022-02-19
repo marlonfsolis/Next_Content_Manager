@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function ResourceList ({resources}) {
   return (
-    <div>
+    <>
       <section className="hero">
         <div className="hero-body">
           <div className="container">
@@ -28,6 +28,6 @@ export default function ResourceList ({resources}) {
           </div>
         </div>
       </section>      
-    </div>
+    </>
   )
 }
