@@ -25,7 +25,7 @@ const Navbar = () => {
                   Home
                 </a>
               </Link>
-              <Link href="/" passHref>
+              <Link href="/about" passHref>
                 <a className="navbar-item is-size-5 has-text-weight-semibold">
                 About
                 </a>
