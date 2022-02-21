@@ -5,14 +5,16 @@ import { useRouter } from "next/router";
 const Navbar = () => {
   const router = useRouter();
 
-  const getLinkClasses = (path, exact = true) => {
+  const getLinkClasses = (path, exact = false) => {
     let routePath = "";
     routePath = router.asPath || "";
-    // console.log(router.asPath);
+    console.log(routePath);
     
     let classes = "navbar-item is-size-5 has-text-weight-semibold";
-    if ( exact && path === routePath) {
-      classes = classes.concat(" is-active");
+    if ( exact) {
+      if (path === routePath) {
+        classes = classes.concat(" is-active"); 
+      }
     } else if (routePath.startsWith(path)) {
       classes = classes.concat(" is-active");
     } 
@@ -38,15 +40,20 @@ const Navbar = () => {
           <div id="navbarMenu" className="navbar-menu">
             <div className="navbar-end">
               <Link href="/" passHref>
-                <a className={getLinkClasses("/home")}>
+                <a className={getLinkClasses("/home", true)}>
                   Home
                 </a>
               </Link>
               <Link href="/home/about" passHref>
                 <a className={getLinkClasses("/home/about")}>
-                About
+                  About
                 </a>
-              </Link>            
+              </Link>    
+              <Link href="/home/otherpage" passHref>
+                <a className={getLinkClasses("/home/otherpage")}>
+                  Other Link
+                </a>
+              </Link>                        
             </div>
           </div>
         </div>

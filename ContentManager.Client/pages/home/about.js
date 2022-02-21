@@ -19,7 +19,7 @@ export default function About() {
 
   return (
     <Layout>
-    <h1>{data.message}</h1>
+    <h1 className="h1">{data.message}</h1>
     </Layout>
   );
 }
