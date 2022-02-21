@@ -12,7 +12,7 @@ export default function About() {
    * Install swr: npm install swr
    * THen use it like here
    */
-  const {data, error} = useSWR('api/about', fetcher);
+  const {data, error} = useSWR('../api/about', fetcher);
   
   if (error) return <div>failed to load</div>
   if (!data) return <div>loading...</div>

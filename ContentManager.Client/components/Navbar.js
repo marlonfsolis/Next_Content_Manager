@@ -1,7 +1,24 @@
 import React from "react";
 import Link from 'next/link'
+import { useRouter } from "next/router";
 
 const Navbar = () => {
+  const router = useRouter();
+
+  const getLinkClasses = (path, exact = true) => {
+    const patheName = router.pathname;
+    console.log(router.asPath);
+    
+    let classes = "navbar-item is-size-5 has-text-weight-semibold";
+    // if (router.pathname.startsWith(path)) {
+    if (router.pathname.includes(path)) {
+      classes = classes.concat(" is-active");
+    } else if (router.pathname.includes(path)){
+
+    }
+    return classes;
+  }
+  
   return (
     <>
       <nav className="navbar is-dark" role="navigation">
@@ -21,12 +38,12 @@ const Navbar = () => {
           <div id="navbarMenu" className="navbar-menu">
             <div className="navbar-end">
               <Link href="/" passHref>
-                <a className="navbar-item is-active is-size-5 has-text-weight-semibold">
+                <a className={getLinkClasses("/home")}>
                   Home
                 </a>
               </Link>
-              <Link href="/about" passHref>
-                <a className="navbar-item is-size-5 has-text-weight-semibold">
+              <Link href="/home/about" passHref>
+                <a className={getLinkClasses("/home/about")}>
                 About
                 </a>
               </Link>            
