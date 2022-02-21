@@ -1,10 +1,17 @@
+import { useEffect } from "react";
 import { useRouter } from "next/router";
+import LoaderSpinner from "components/LoaderSpinner";
 
-export default function Home({resources}) {
+export default function Index({ resources }) {
   const router = useRouter();
-  router.push("/home");
+
+  useEffect(() => {
+    router.push("/home");
+  });
+
   return (
     <>
+      <LoaderSpinner/>
     </>
   );
 }

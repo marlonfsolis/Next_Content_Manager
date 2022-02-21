@@ -6,16 +6,16 @@ const Navbar = () => {
   const router = useRouter();
 
   const getLinkClasses = (path, exact = true) => {
-    const patheName = router.pathname;
-    console.log(router.asPath);
+    let routePath = "";
+    routePath = router.asPath || "";
+    // console.log(router.asPath);
     
     let classes = "navbar-item is-size-5 has-text-weight-semibold";
-    // if (router.pathname.startsWith(path)) {
-    if (router.pathname.includes(path)) {
+    if ( exact && path === routePath) {
       classes = classes.concat(" is-active");
-    } else if (router.pathname.includes(path)){
-
-    }
+    } else if (routePath.startsWith(path)) {
+      classes = classes.concat(" is-active");
+    } 
     return classes;
   }
   
