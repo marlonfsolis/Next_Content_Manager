@@ -1,6 +1,7 @@
 import React from "react";
 import Link from 'next/link'
 import { useRouter } from "next/router";
+import ActiveLink from "./ActionLink";
 
 const Navbar = () => {
   const router = useRouter();
@@ -38,22 +39,10 @@ const Navbar = () => {
             </span>
           </div>
           <div id="navbarMenu" className="navbar-menu">
-            <div className="navbar-end">
-              <Link href="/" passHref>
-                <a className={getLinkClasses("/home", true)}>
-                  Home
-                </a>
-              </Link>
-              <Link href="/home/about" passHref>
-                <a className={getLinkClasses("/home/about")}>
-                  About
-                </a>
-              </Link>    
-              <Link href="/home/otherpage" passHref>
-                <a className={getLinkClasses("/home/otherpage")}>
-                  Other Link
-                </a>
-              </Link>                        
+            <div className="navbar-end">  
+              <ActiveLink href={"/home"} exact={true}>Home</ActiveLink>
+              <ActiveLink href={"/home/about"} exact={true}>About</ActiveLink>
+              <ActiveLink href={"/home/otherpage"} exact={true}>otherpage</ActiveLink>
             </div>
           </div>
         </div>
