@@ -30,7 +30,10 @@ export async function getServerSideProps() {
    * But we can use any other external api. Just need to fetch from the right URL.
    */
   const resData = await fetch('http://localhost:3000/api/resources');
+  //const resData = await fetch('http://localhost:5179/api/resources', { method: "POST"});
   const data = await resData.json();
+
+  console.log(resData);
 
   return {
     props: {
