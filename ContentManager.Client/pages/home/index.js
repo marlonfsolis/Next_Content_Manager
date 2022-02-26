@@ -33,7 +33,7 @@ export async function getServerSideProps() {
   //const resData = await fetch('http://localhost:5179/api/resources', { method: "POST"});
   const data = await resData.json();
 
-  console.log(resData);
+  // console.log(resData);
 
   return {
     props: {
