@@ -40,15 +40,9 @@ const Navbar = () => {
           </div>
           <div id="navbarMenu" className="navbar-menu">
             <div className="navbar-end">  
-              {/* <ActiveLink href={"/home"} exact={true}>Home</ActiveLink>
-              <ActiveLink href={"/home/about"} exact={true}>About</ActiveLink>
-              <ActiveLink href={"/home/otherpage"} exact={true}>otherpage</ActiveLink> */}
-
-
               <ActiveLink href={"/home"} exact={true}>Home</ActiveLink>
+              <ActiveLink href={"/resources/add"}>Add</ActiveLink>
               <ActiveLink href={"/home/about"}>About</ActiveLink>
-              <ActiveLink href={"/home/otherpage"}>otherpage</ActiveLink>
-
             </div>
           </div>
         </div>

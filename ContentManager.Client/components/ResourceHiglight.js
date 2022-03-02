@@ -1,7 +1,14 @@
 import React from "react";
 import moment from 'moment';
+import {useRouter} from 'next/router';
 
 export default function ResourceHiglight ({ resources }) {
+  const router = useRouter();
+
+  const navigateTo = (path) => {
+    router.push(path);
+  };
+  
   return (
     <>
       <section className="hero ">
@@ -22,6 +29,12 @@ export default function ResourceHiglight ({ resources }) {
                           <p>
                             {r.description}
                           </p>
+                          <div className="buttons">
+                            <button className="button is-info" 
+                              type="button" 
+                              onClick={() => navigateTo("/resources/details")}>Details</button>
+                            <button className="button is-warning" type="button">Edit</button>
+                          </div>
                         </div>
                       </div>
                     </div>
