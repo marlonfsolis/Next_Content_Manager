@@ -20,7 +20,7 @@ export default function ResourceHiglight ({ resources }) {
                 const subtitle = moment(r.createdAt).format('MMMM Do YYYY');
                 
                 return (
-                  <section key={r.id} className="section is-small">
+                  <section key={r.resourceId} className="section is-small">
                     <div className="columns">
                       <div className="column is-8 is-offset-2">
                         <div className="content is-medium">

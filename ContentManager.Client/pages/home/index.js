@@ -29,11 +29,21 @@ export async function getServerSideProps() {
    * Here (pages/api) Next.js allow us to build api endpoints.
    * But we can use any other external api. Just need to fetch from the right URL.
    */
-  const resData = await fetch('http://localhost:3000/api/resources');
-  //const resData = await fetch('http://localhost:5179/api/resources', { method: "POST"});
-  const data = await resData.json();
 
-  // console.log(resData);
+  let data = [];
+  try {
+    // const response = await fetch('http://localhost:3000/api/resources');
+    const response = await fetch('http://localhost:5179/api/resources', { method: "GET"});
+
+    const responseJson = await response.json();
+    if (responseJson?.error === null) {
+      data = responseJson.data;
+    } else {
+      console.log("Response Error: ", responseJson.error);
+    }
+  } catch (error) {
+    console.log("Unhandled Error: ", error);
+  }
 
   return {
     props: {
