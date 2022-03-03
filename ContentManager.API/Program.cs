@@ -22,7 +22,8 @@ services.AddScoped<LinkService>();
 
 
 /* CORS SETUP */
-services.AddCors(options => {
+services.AddCors(options =>
+{
     options.DefaultPolicyName = Keys.AllowSpecificOrigins_Policy;
     options.AddPolicy(Keys.AllowSpecificOrigins_Policy, policy =>
     {

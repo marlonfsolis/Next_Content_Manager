@@ -26,14 +26,29 @@ export async function getServerSideProps() {
   
   /**
    * Here we are calling an api endpoint on express located on pages/api folder.
-   * Here (pages/api) Next.js allow us to build api endpoints.
+   * On directory (pages/api) Next.js allow us to build api endpoints.
    * But we can use any other external api. Just need to fetch from the right URL.
+   * 
+   * For CORS you can use Next.js API as proxy sending the request from Client to Next API
+   * and on the API you send the request to exernal API.
+   * Or just configure the CORS on the external API and send directly the request.
+   * 
+   * On this method (getServerSideProps) like the name says is on the server side so 
+   * CORS will not affect.
    */
 
   let data = [];
   try {
     // const response = await fetch('http://localhost:3000/api/resources');
-    const response = await fetch('http://localhost:5179/api/resources', { method: "GET"});
+    const response = await fetch('http://localhost:5179/api/resources', { 
+      method: "GET",
+      mode: 'cors', // no-cors, *cors, same-origin
+      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: 'same-origin', // include, *same-origin, omit
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
 
     const responseJson = await response.json();
     if (responseJson?.error === null) {
