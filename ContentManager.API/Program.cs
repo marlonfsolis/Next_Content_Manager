@@ -22,11 +22,25 @@ services.AddScoped<ResourceService>();
 services.AddScoped<LinkService>();
 
 
+/* CORS SETUP */
+services.AddCors(options => {
+    options.DefaultPolicyName = Keys.AllowSpecificOrigins_Policy;
+    options.AddPolicy(Keys.AllowSpecificOrigins_Policy, policy =>
+    {
+        policy.WithOrigins("http://localhost:3000");
+        policy.WithMethods("GET", "POST", "PUT", "DELETE");
+        policy.AllowAnyHeader();
+    });
+});
+
+
 var app = builder.Build();
 
 
 
 // Configure the HTTP request pipeline.
+
+app.UseCors();
 
 app.UseAuthorization();
 
