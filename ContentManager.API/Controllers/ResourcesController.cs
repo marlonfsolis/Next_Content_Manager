@@ -26,6 +26,7 @@ namespace ContentManager.API.Controllers
         [HttpGet]
         [HttpHead]
         [Route("", Name = "GetResources")]
+        [DisableCors]
         public async Task<ActionResult<Result<IList<Resource>>>> GetResources(
             [FromQuery] ResourceRP resourcesRP)
         {
