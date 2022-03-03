@@ -1,7 +1,6 @@
 using ContentManager.API.Constants;
 using ContentManager.API.DAL;
 using ContentManager.API.Services;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 
@@ -22,11 +21,24 @@ services.AddScoped<ResourceService>();
 services.AddScoped<LinkService>();
 
 
+/* CORSS SETUP */
+services.AddCors(options => { 
+    options.DefaultPolicyName = Keys.AllowSpecificOrigins_Policy;
+    options.AddPolicy(Keys.AllowSpecificOrigins_Policy, policy => {
+        policy.WithOrigins("http://localhost:31000");
+        policy.WithMethods("GET", "POST", "PUT", "DELETE");
+        policy.AllowAnyHeader();
+    });
+});
+
+
 var app = builder.Build();
 
 
 
 // Configure the HTTP request pipeline.
+
+app.UseCors();
 
 app.UseAuthorization();
 

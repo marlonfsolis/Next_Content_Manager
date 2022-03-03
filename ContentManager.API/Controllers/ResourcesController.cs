@@ -1,12 +1,15 @@
-﻿using ContentManager.API.Models;
+﻿using ContentManager.API.Constants;
+using ContentManager.API.Models;
 using ContentManager.API.ResourceParameters;
 using ContentManager.API.Services;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ContentManager.API.Controllers
 {
     [ApiController]
     [Route("api/resources")]
+    [EnableCors(Keys.AllowSpecificOrigins_Policy)]
     public class ResourcesController : ControllerBase
     {
         public ResourceService ResourceService { get; }
@@ -23,6 +26,7 @@ namespace ContentManager.API.Controllers
         [HttpGet]
         [HttpHead]
         [Route("", Name = "GetResources")]
+        [DisableCors]
         public async Task<ActionResult<Result<IList<Resource>>>> GetResources(
             [FromQuery] ResourceRP resourcesRP)
         {
