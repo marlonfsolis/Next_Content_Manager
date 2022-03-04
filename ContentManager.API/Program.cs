@@ -24,10 +24,13 @@ services.AddScoped<LinkService>();
 /* CORS SETUP */
 services.AddCors(options =>
 {
+    var allowedOriginsSetting = builder.Configuration.GetValue<string>("AllowedOrigins");
+    var allowedOrigins = allowedOriginsSetting.Split(',', StringSplitOptions.RemoveEmptyEntries);
+
     options.DefaultPolicyName = Keys.AllowSpecificOrigins_Policy;
     options.AddPolicy(Keys.AllowSpecificOrigins_Policy, policy =>
     {
-        policy.WithOrigins("http://localhost:3000");
+        policy.WithOrigins(allowedOrigins);
         policy.WithMethods("GET", "POST", "PUT", "DELETE");
         policy.AllowAnyHeader();
     });
