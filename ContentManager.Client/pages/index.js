@@ -6,12 +6,12 @@ export default function Index({ resources }) {
   const router = useRouter();
 
   useEffect(() => {
-    router.push("/home");
+    // router.push("/home");
   });
 
   return (
     <>
-      <LoaderSpinner/>
+      <LoaderSpinner />
     </>
   );
 }

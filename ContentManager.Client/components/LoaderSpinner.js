@@ -1,14 +1,13 @@
+import Spinner from "react-bootstrap/Spinner";
+import Stack from "react-bootstrap/Stack";
+
 const LoaderSpinner = () => {
   return (
-    <section className="hero is-fullheight">
-      <div className="hero-body has-text-centered">
-        <div className="container">
-          <div className="box is-shadowless">
-            <button className="button is-inverted is-large is-loading" style={styles.loader}>Loading...</button>
-          </div>
-        </div>
-      </div>
-    </section>    
+    <Stack className="vh-100 vw-100 justify-content-center align-items-center">
+      <Spinner animation="grow" size="lg" role={"status"}>
+        <span className="visually-hidden">Loading...</span>
+      </Spinner>
+    </Stack >
   );
 }
 
