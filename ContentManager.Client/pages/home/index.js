@@ -8,9 +8,9 @@ export default function Home({resources}) {
   return (
     <>
       <Layout>
-        <ResourceHiglight resources={resources} />
+        {/* <ResourceHiglight resources={resources} />
         <Newsletter />
-        <ResourceList resources={resources} />
+        <ResourceList resources={resources} /> */}
         <Footer />
       </Layout>
     </>
@@ -39,16 +39,22 @@ export async function getServerSideProps() {
 
   let data = [];
   try {
-    // const response = await fetch('http://localhost:3000/api/resources');
-    const response = await fetch('http://localhost:5179/api/resources', { 
-      method: "GET",
-      mode: 'cors', // no-cors, *cors, same-origin
-      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: 'same-origin', // include, *same-origin, omit
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
+    
+    let response = {};
+    try {
+       response = await fetch('http://localhost:5179/api/resources', {
+        method: "GET",
+        mode: 'cors', // no-cors, *cors, same-origin
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'same-origin', // include, *same-origin, omit
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+    } catch (error) {
+      response = await fetch('http://localhost:3000/api/resources');
+    }
+
 
     const responseJson = await response.json();
     if (responseJson?.error === null) {
