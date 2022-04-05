@@ -39,7 +39,7 @@ export default () => {
               <ActiveLink href="/home/about" type="navLink">About</ActiveLink>
               <NavDropdown title="Dropdown" id="basic-nav-dropdown">
                 <ActiveLink href="/home/about" type="dropdownItem">About</ActiveLink>
-                <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+                <ActiveLink href="#action/3.1" type="dropdownItem">Action</ActiveLink>
                 <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
                 <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
                 <NavDropdown.Divider />
