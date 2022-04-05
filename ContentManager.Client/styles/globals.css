@@ -1,7 +1,15 @@
-@import 'bootstrap/dist/css/bootstrap.min.css';
+@import "bootstrap/dist/css/bootstrap.min.css";
 @import "https://kendo.cdn.telerik.com/themes/5.0.1/bootstrap/bootstrap-main.css";
 
 .navbar a {
 	color: inherit;
 	text-decoration: none;
+}
+
+.box-red {
+	border: 1px solid red;
+}
+
+.box-green {
+	border: 1px solid green;
 }
