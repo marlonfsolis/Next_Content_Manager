@@ -1,12 +1,15 @@
-import Layout from "components/Layout";
 import { useEffect, useState } from "react";
+import Layout from "components/Layout";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import Button from "react-bootstrap/Button";
+import { useForm } from "react-hook-form";
 
 export default function AddResourcePage() {
+	const { register, handleSubmit, watch, errors } = useForm();
 
-	const handleSubmit = (dataItem) => alert(JSON.stringify(dataItem, null, 2));
+	const onSubmit = (dataItem) => alert(JSON.stringify(dataItem, null, 2));
 
 	const [timeToFinish, setTimeToFinish] = useState(120);
 
@@ -21,7 +24,7 @@ export default function AddResourcePage() {
 
 	return (
 		<Layout>
-			<Form className="col-8 mx-auto">
+			<Form className="col-8 mx-auto" onSubmit={handleSubmit(onSubmit)}>
 				<Row className="mb-5">
 					<Col className="d-flex justify-content-center">
 						<h1>Create New Resource</h1>
@@ -40,7 +43,7 @@ export default function AddResourcePage() {
 					</Form.Group>
 				</Row>
 
-				<Form.Group as={Col} className=" mb-3">
+				<Form.Group as={Col} className="mb-3">
 					<Form.Label>Link</Form.Label>
 					<Form.Control type="text" placeholder="Link" />
 				</Form.Group>
@@ -51,7 +54,7 @@ export default function AddResourcePage() {
 				</Form.Group>
 
 				<Row>
-					<Form.Group as={Col} className=" mb-3">
+					<Form.Group as={Col} className="mb-3">
 						<Form.Label>Priority</Form.Label>
 						<Form.Select type="text" aria-label="What is the priority for the resource">
 							<option value={-1}>Select one</option>
@@ -67,7 +70,7 @@ export default function AddResourcePage() {
 					</Form.Group>
 				</Row>
 
-				<Form.Group as={Col} className=" mb-3">
+				<Form.Group as={Col} className="mb-3">
 					<Form.Label>Time To Finish</Form.Label>
 					<Form.Range min="0" max="1440" onChange={timeToFinish_ChangeHandler} value={timeToFinish} />
 					<Form.Text>{timeToFinish} minutes</Form.Text>
@@ -77,6 +80,9 @@ export default function AddResourcePage() {
 					<Form.Check type="switch" label="Active" id="activeStatus" />
 				</Form.Group>
 
+				<Button type="submit" variant="primary" size="lg" className="mt-5">
+					Submit
+				</Button>
 			</Form>
 
 		</Layout>
