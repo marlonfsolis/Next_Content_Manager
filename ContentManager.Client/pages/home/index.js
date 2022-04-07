@@ -2,7 +2,6 @@ import Layout from "components/Layout";
 import ResourceHiglight from "components/ResourceHiglight";
 import Newsletter from "components/Newsletter";
 import ResourceList from "components/ResourceList";
-import Footer from "components/Footer";
 
 export default function Home({resources}) {
   return (
@@ -11,7 +10,6 @@ export default function Home({resources}) {
         {/* <ResourceHiglight resources={resources} />
         <Newsletter />
         <ResourceList resources={resources} /> */}
-        <Footer />
       </Layout>
     </>
   );
