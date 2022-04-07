@@ -31,7 +31,15 @@ export default function About() {
         <section className="px-4 py-5 my-5 text-center">
           <h1 className="display-5 fw-bold">About Content Manager</h1>
           <div className="col-lg-6 mx-auto">
-            <p className="lead mb-4">An app to learn Next.js</p>
+            <p className="lead mb-4">
+              An app to learn Next.js.
+              The app is guided by&nbsp;
+              <a href="https://www.udemy.com/user/filip-jerga/">Filip Jerga</a>
+              on Udemy course&nbsp;
+              <a href="https://www.udemy.com/course/awesome-nextjs-with-react-and-node-amazing-portfolio-app/">
+                Complete Next.js with React & Node - Beautiful Portfolio App
+              </a>
+            </p>
             <p className="lead mb-4">Here we are using Hero snipped from <a href="https://getbootstrap.com/docs/5.0/examples/heroes/">Bootstrap Examples page</a>.</p>
           </div>
         </section>
