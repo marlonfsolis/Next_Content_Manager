@@ -32,29 +32,29 @@ export default function AddResourcePage() {
 				</Row>
 
 				<Row className="mb-3">
-					<Form.Group as={Col}>
+					<Form.Group as={Col} controlId="title">
 						<Form.Label>Title</Form.Label>
 						<Form.Control type="text" placeholder="Enter resource title" />
 					</Form.Group>
 
-					<Form.Group as={Col}>
+					<Form.Group as={Col} controlId="description">
 						<Form.Label>Description</Form.Label>
 						<Form.Control type="text" placeholder="Describe the resource" />
 					</Form.Group>
 				</Row>
 
-				<Form.Group as={Col} className="mb-3">
+				<Form.Group as={Col} className="mb-3" controlId="link">
 					<Form.Label>Link</Form.Label>
 					<Form.Control type="text" placeholder="Link" />
 				</Form.Group>
 
-				<Form.Group as={Col} className=" mb-3">
+				<Form.Group as={Col} className=" mb-3" controlId="image">
 					<Form.Label>Image</Form.Label>
 					<Form.Control type="text" placeholder="Enter the url of the image" />
 				</Form.Group>
 
 				<Row>
-					<Form.Group as={Col} className="mb-3">
+					<Form.Group as={Col} className="mb-3" controlId="priority">
 						<Form.Label>Priority</Form.Label>
 						<Form.Select type="text" aria-label="What is the priority for the resource">
 							<option value={-1}>Select one</option>
@@ -64,19 +64,19 @@ export default function AddResourcePage() {
 						</Form.Select>
 					</Form.Group>
 
-					<Form.Group as={Col}>
+					<Form.Group as={Col} controlId="createdAt">
 						<Form.Label>Created At</Form.Label>
 						<Form.Control type="date" />
 					</Form.Group>
 				</Row>
 
-				<Form.Group as={Col} className="mb-3">
+				<Form.Group as={Col} className="mb-3" controlId="timeToFinish">
 					<Form.Label>Time To Finish</Form.Label>
 					<Form.Range min="0" max="1440" onChange={timeToFinish_ChangeHandler} value={timeToFinish} />
 					<Form.Text>{timeToFinish} minutes</Form.Text>
 				</Form.Group>
 
-				<Form.Group as={Col}>
+				<Form.Group as={Col} controlId="active">
 					<Form.Check type="switch" label="Active" id="activeStatus" />
 				</Form.Group>
 
