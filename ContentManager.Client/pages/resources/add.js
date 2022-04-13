@@ -34,12 +34,15 @@ export default function AddResourcePage() {
 				<Row className="mb-3">
 					<Form.Group as={Col} controlId="title">
 						<Form.Label>Title</Form.Label>
-						<Form.Control type="text" placeholder="Enter resource title" />
+						<Form.Control type="text" placeholder="Enter resource title"
+							{...register("title", { required: true, minLength: 4 })} />
+						<Form.Text>{errors && "Title is required."}</Form.Text>
 					</Form.Group>
 
 					<Form.Group as={Col} controlId="description">
 						<Form.Label>Description</Form.Label>
-						<Form.Control type="text" placeholder="Describe the resource" />
+						<Form.Control type="text" placeholder="Describe the resource"
+							{...register("description", { minLength: 4 })} />
 					</Form.Group>
 				</Row>
 
