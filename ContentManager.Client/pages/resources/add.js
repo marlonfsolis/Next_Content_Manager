@@ -5,9 +5,10 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import { useForm } from "react-hook-form";
+import { ErrorMessage } from '@hookform/error-message';
 
 export default function AddResourcePage() {
-	const { register, handleSubmit, watch, errors } = useForm();
+	const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
 	const onSubmit = (dataItem) => alert(JSON.stringify(dataItem, null, 2));
 
@@ -22,6 +23,25 @@ export default function AddResourcePage() {
 		setTimeToFinish(time);
 	};
 
+	// Form rules definition
+	const errorMsgRenderFn = ({ message }) => <Form.Text className="text-danger">{message}</Form.Text>
+	var titleRegister = register("title", {
+		required: "Title is required.",
+		minLength: { value: 4, message: "Title must be greater then 4 characters." }
+	});
+	var descRegister = register("description", {
+		minLength: { value: 4, message: "Description must be greater then 4 characters." }
+	});
+	var priorityRegister = register("priority", {
+		min: { value: 1, message: "Please select a valid priority option." },
+		max: { value: 3, message: "Please select a valid priority option." }
+	});
+	var createdAtRegister = register("createdAt", {
+		required: "Created At date is required."
+	});
+
+
+
 	return (
 		<Layout>
 			<Form className="col-8 mx-auto" onSubmit={handleSubmit(onSubmit)}>
@@ -34,15 +54,14 @@ export default function AddResourcePage() {
 				<Row className="mb-3">
 					<Form.Group as={Col} controlId="title">
 						<Form.Label>Title</Form.Label>
-						<Form.Control type="text" placeholder="Enter resource title"
-							{...register("title", { required: true, minLength: 4 })} />
-						<Form.Text>{errors && "Title is required."}</Form.Text>
+						<Form.Control type="text" placeholder="Enter resource title" {...titleRegister} />
+						<ErrorMessage errors={errors} name="title" render={errorMsgRenderFn} />
 					</Form.Group>
 
 					<Form.Group as={Col} controlId="description">
 						<Form.Label>Description</Form.Label>
-						<Form.Control type="text" placeholder="Describe the resource"
-							{...register("description", { minLength: 4 })} />
+						<Form.Control type="text" placeholder="Describe the resource" {...descRegister} />
+						<ErrorMessage errors={errors} name="description" render={errorMsgRenderFn} />
 					</Form.Group>
 				</Row>
 
@@ -59,17 +78,19 @@ export default function AddResourcePage() {
 				<Row>
 					<Form.Group as={Col} className="mb-3" controlId="priority">
 						<Form.Label>Priority</Form.Label>
-						<Form.Select type="text" aria-label="What is the priority for the resource">
+						<Form.Select type="text" aria-label="What is the priority for the resource" {...priorityRegister}>
 							<option value={-1}>Select one</option>
 							<option value={1}>1</option>
 							<option value={2}>2</option>
 							<option value={3}>3</option>
 						</Form.Select>
+						<ErrorMessage errors={errors} name="priority" render={errorMsgRenderFn} />
 					</Form.Group>
 
 					<Form.Group as={Col} controlId="createdAt">
 						<Form.Label>Created At</Form.Label>
-						<Form.Control type="date" />
+						<Form.Control type="date" {...createdAtRegister} />
+						<ErrorMessage errors={errors} name="createdAt" render={errorMsgRenderFn} />
 					</Form.Group>
 				</Row>
 
