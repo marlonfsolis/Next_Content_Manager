@@ -10,13 +10,23 @@ import { ErrorMessage } from '@hookform/error-message';
 export default function AddResourcePage() {
 	const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
-	const onSubmit = (dataItem) => alert(JSON.stringify(dataItem, null, 2));
-
 	const [timeToFinish, setTimeToFinish] = useState(120);
 
 	useEffect(() => {
 		// addResource();
 	});
+
+	const onSubmit = (dataItem) => {
+		/* 
+		* Form.Range do not work when the register from hook-form is assigned
+		* So lets get the value here bofore send to server.
+		*/
+		dataItem.timeToFinish = timeToFinish;
+
+
+		addResource(dataItem);
+		// alert(JSON.stringify(dataItem, null, 2));
+	};
 
 	const timeToFinish_ChangeHandler = (e) => {
 		const time = e.target.value;
@@ -40,6 +50,41 @@ export default function AddResourcePage() {
 		required: "Created At date is required."
 	});
 
+
+	const addResource = (data) => {
+
+		// const data = {
+		// 	title: "My new resource",
+		// 	description: "My new resource description",
+		// 	resource_link: "https://my-link.com",
+		// 	imageUrl: "https://my-images.com",
+		// 	priority: 1,
+		// 	timeToFinish: 20,
+		// 	active: true,
+		// 	createdAt: "2022-02-11"
+		// };
+
+		fetch('http://localhost:5179/api/resources', {
+			method: 'POST', // *GET, POST, PUT, DELETE, etc.
+			mode: 'cors', // no-cors, *cors, same-origin
+			cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+			credentials: 'same-origin', // include, *same-origin, omit
+			headers: {
+				'Content-Type': 'application/json'
+				// 'Content-Type': 'application/x-www-form-urlencoded',
+			},
+			redirect: 'follow', // manual, *follow, error
+			referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+			body: JSON.stringify(data) // body data type must match "Content-Type" header
+		})
+			.then(() => {
+				console.log("Post complete");
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+
+	};
 
 
 	return (
@@ -67,12 +112,12 @@ export default function AddResourcePage() {
 
 				<Form.Group as={Col} className="mb-3" controlId="link">
 					<Form.Label>Link</Form.Label>
-					<Form.Control type="text" placeholder="Link" />
+					<Form.Control type="text" placeholder="Link" {...register("link")} />
 				</Form.Group>
 
 				<Form.Group as={Col} className=" mb-3" controlId="image">
 					<Form.Label>Image</Form.Label>
-					<Form.Control type="text" placeholder="Enter the url of the image" />
+					<Form.Control type="text" placeholder="Enter the url of the image" {...register("image")} />
 				</Form.Group>
 
 				<Row>
@@ -96,12 +141,13 @@ export default function AddResourcePage() {
 
 				<Form.Group as={Col} className="mb-3" controlId="timeToFinish">
 					<Form.Label>Time To Finish</Form.Label>
-					<Form.Range min="0" max="1440" onChange={timeToFinish_ChangeHandler} value={timeToFinish} />
+					<Form.Range min="0" max="1440" onChange={timeToFinish_ChangeHandler}
+						value={timeToFinish} />
 					<Form.Text>{timeToFinish} minutes</Form.Text>
 				</Form.Group>
 
 				<Form.Group as={Col} controlId="active">
-					<Form.Check type="switch" label="Active" id="activeStatus" />
+					<Form.Check type="switch" label="Active" id="activeStatus" {...register("active")} />
 				</Form.Group>
 
 				<Button type="submit" variant="primary" size="lg" className="mt-5">
@@ -111,40 +157,4 @@ export default function AddResourcePage() {
 
 		</Layout>
 	);
-}
-
-
-const addResource = () => {
-
-	const data = {
-		title: "My new resource",
-		description: "My new resource description",
-		resource_link: "https://my-link.com",
-		imageUrl: "https://my-images.com",
-		priority: 1,
-		timeToFinish: 20,
-		active: true,
-		createdAt: "2022-02-11"
-	};
-
-	fetch('http://localhost:5179/api/resources', {
-		method: 'POST', // *GET, POST, PUT, DELETE, etc.
-		mode: 'cors', // no-cors, *cors, same-origin
-		cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-		credentials: 'same-origin', // include, *same-origin, omit
-		headers: {
-			'Content-Type': 'application/json'
-			// 'Content-Type': 'application/x-www-form-urlencoded',
-		},
-		redirect: 'follow', // manual, *follow, error
-		referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-		body: JSON.stringify(data) // body data type must match "Content-Type" header
-	})
-		.then(() => {
-			console.log("Post complete");
-		})
-		.catch((error) => {
-			console.log(error);
-		});
-
 }
