@@ -8,30 +8,43 @@ import { useForm } from "react-hook-form";
 import { ErrorMessage } from '@hookform/error-message';
 
 export default function AddResourcePage() {
-	const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
-	const [timeToFinish, setTimeToFinish] = useState(120);
+	const { register, handleSubmit, watch, formState: { errors } } = useForm({
+		defaultValues: {
+			title: "Default Title",
+			description: "Default description",
+			timeToFinish: 120,
+			active: true
+		}
+	});
+
+
+	const [timeToFinish, active] = watch(["timeToFinish", "active"]);
+	// You can call a function too in case you want to do more stuff
+	watch((data, { name, type }) => {
+		switch (name) {
+			case "title":
+				// console log the event
+				console.log(`Title has ${type} and current value is ${data?.title}`);
+				// and do more stuff if needed
+				break;
+
+			default:
+				break;
+		}
+	});
+
 
 	useEffect(() => {
 		// addResource();
-	});
+	}, []);
+
 
 	const onSubmit = (dataItem) => {
-		/* 
-		* Form.Range do not work when the register from hook-form is assigned
-		* So lets get the value here bofore send to server.
-		*/
-		dataItem.timeToFinish = timeToFinish;
-
-
 		addResource(dataItem);
 		// alert(JSON.stringify(dataItem, null, 2));
 	};
 
-	const timeToFinish_ChangeHandler = (e) => {
-		const time = e.target.value;
-		setTimeToFinish(time);
-	};
 
 	// Form rules definition
 	const errorMsgRenderFn = ({ message }) => <Form.Text className="text-danger">{message}</Form.Text>
@@ -49,6 +62,13 @@ export default function AddResourcePage() {
 	var createdAtRegister = register("createdAt", {
 		required: "Created At date is required."
 	});
+	var timeToFinishRegister = register("timeToFinish", {
+		min: { value: 1, message: "Please set a time greater than 1." },
+		max: { value: 1440, message: "Please select a time less than 1440." }
+	});
+	var linkRegister = register("link", { value: "http://my-link.com" });
+	var imageRegister = register("image", { value: "http://my-image.com" });
+	var activeRegister = register("active");
 
 
 	const addResource = (data) => {
@@ -71,7 +91,6 @@ export default function AddResourcePage() {
 			credentials: 'same-origin', // include, *same-origin, omit
 			headers: {
 				'Content-Type': 'application/json'
-				// 'Content-Type': 'application/x-www-form-urlencoded',
 			},
 			redirect: 'follow', // manual, *follow, error
 			referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
@@ -112,12 +131,12 @@ export default function AddResourcePage() {
 
 				<Form.Group as={Col} className="mb-3" controlId="link">
 					<Form.Label>Link</Form.Label>
-					<Form.Control type="text" placeholder="Link" {...register("link")} />
+					<Form.Control type="text" placeholder="Link" {...linkRegister} />
 				</Form.Group>
 
 				<Form.Group as={Col} className=" mb-3" controlId="image">
 					<Form.Label>Image</Form.Label>
-					<Form.Control type="text" placeholder="Enter the url of the image" {...register("image")} />
+					<Form.Control type="text" placeholder="Enter the url of the image" {...imageRegister} />
 				</Form.Group>
 
 				<Row>
@@ -141,13 +160,17 @@ export default function AddResourcePage() {
 
 				<Form.Group as={Col} className="mb-3" controlId="timeToFinish">
 					<Form.Label>Time To Finish</Form.Label>
-					<Form.Range min="0" max="1440" onChange={timeToFinish_ChangeHandler}
-						value={timeToFinish} />
+					{/* <Form.Range min="0" max="1440" onChange={timeToFinish_ChangeHandler}
+						value={timeToFinish} /> */}
+					<Form.Range min="0" max="1440" {...timeToFinishRegister} />
 					<Form.Text>{timeToFinish} minutes</Form.Text>
+					<div>
+						<ErrorMessage errors={errors} name="timeToFinish" render={errorMsgRenderFn} />
+					</div>
 				</Form.Group>
 
 				<Form.Group as={Col} controlId="active">
-					<Form.Check type="switch" label="Active" id="activeStatus" {...register("active")} />
+					<Form.Check type="switch" label="Active" id="activeStatus" {...activeRegister} />
 				</Form.Group>
 
 				<Button type="submit" variant="primary" size="lg" className="mt-5">
