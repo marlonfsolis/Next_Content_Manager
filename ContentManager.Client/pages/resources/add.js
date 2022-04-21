@@ -9,13 +9,15 @@ import { ErrorMessage } from '@hookform/error-message';
 
 export default function AddResourcePage() {
 
-	const { register, handleSubmit, watch, formState: { errors } } = useForm({
-		defaultValues: {
-			title: "Default Title",
-			description: "Default description",
-			timeToFinish: 120,
-			active: true
-		}
+	const formDefaultValues = {
+		title: "Default Title",
+		description: "Default description",
+		timeToFinish: 120,
+		active: true
+	};
+
+	const { register, handleSubmit, watch, reset, formState: { errors, isSubmitSuccessful } } = useForm({
+		defaultValues: formDefaultValues
 	});
 
 
@@ -34,6 +36,8 @@ export default function AddResourcePage() {
 		}
 	});
 
+	const [showSuccessfulMsg, setShowSuccessfulMsg] = useState(false);
+	const [showFailMdsg, setShowFailMdsg] = useState(false);
 
 	useEffect(() => {
 		// addResource();
@@ -72,6 +76,7 @@ export default function AddResourcePage() {
 
 
 	const addResource = (data) => {
+		// console.log(data);
 
 		// const data = {
 		// 	title: "My new resource",
@@ -97,9 +102,12 @@ export default function AddResourcePage() {
 			body: JSON.stringify(data) // body data type must match "Content-Type" header
 		})
 			.then(() => {
+				setShowSuccessfulMsg(true);
+				reset();
 				console.log("Post complete");
 			})
 			.catch((error) => {
+				setShowFailMdsg(false);
 				console.log(error);
 			});
 
@@ -108,6 +116,28 @@ export default function AddResourcePage() {
 
 	return (
 		<Layout>
+			{showSuccessfulMsg &&
+				<div className="m-5">
+					<div className="alert alert-success alert-dismissible fade show" role="alert">
+						<strong>Well done!</strong> You just created a new Resource.
+						<button type="button" className="btn-close"
+							data-bs-dismiss="alert" aria-label="Close"
+							onClick={() => setShowSuccessfulMsg(false)}></button>
+					</div>
+				</div>
+			}
+
+			{showFailMdsg &&
+				<div className="m-5">
+					<div className="alert alert-danger alert-dismissible fade show" role="alert">
+						<strong>Mmmm!</strong> Somthing went wrong. The Resource was not created.
+						<button type="button" className="btn-close"
+							data-bs-dismiss="alert" aria-label="Close"
+							onClick={() => setShowFailMdsg(false)}></button>
+					</div>
+				</div>
+			}
+
 			<Form className="col-8 mx-auto" onSubmit={handleSubmit(onSubmit)}>
 				<Row className="mb-5">
 					<Col className="d-flex justify-content-center">
@@ -142,7 +172,7 @@ export default function AddResourcePage() {
 				<Row>
 					<Form.Group as={Col} className="mb-3" controlId="priority">
 						<Form.Label>Priority</Form.Label>
-						<Form.Select type="text" aria-label="What is the priority for the resource" {...priorityRegister}>
+						<Form.Select aria-label="What is the priority for the resource" {...priorityRegister}>
 							<option value={-1}>Select one</option>
 							<option value={1}>1</option>
 							<option value={2}>2</option>
