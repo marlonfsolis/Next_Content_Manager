@@ -9,6 +9,18 @@ export default function ResourceHiglight({ resources }) {
     router.push(path);
   };
 
+  const [showDeleteResourcePopup, setShowDeleteResourcePopup] = useState(false);
+  const deleteResourcePopupClose = () => setShowDeleteResourcePopup(false);
+  const deleteResourcePopupShow = () => setShowDeleteResourcePopup(true);
+
+
+  const deleteResource = (resourceId) => {
+    // console.log(resourceId);
+    
+    deleteResourcePopupShow(true);
+    
+  };
+
   return (
     <>
       <div className="d-flex flex-row flex-wrap justify-content-center">
@@ -32,7 +44,8 @@ export default function ResourceHiglight({ resources }) {
                         type="button">Edit
                       </button>
                       <button className="btn btn-danger col-sm-2"
-                        type="button">Delete
+                        type="button"
+                        onClick={() => deleteResource(r.resourceId)}>Delete
                       </button>
                     </div>
                   </div>
