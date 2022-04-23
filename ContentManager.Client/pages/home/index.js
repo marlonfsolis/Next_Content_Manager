@@ -7,7 +7,12 @@ export default function Home({resources}) {
   return (
     <>
       <Layout>
-        {/* <ResourceHiglight resources={resources} />
+        <section className="text-center mx-5">
+          <h1 className="my-3">Resources</h1>
+          <ResourceHiglight resources={resources} />
+        </section>
+        
+        {/* 
         <Newsletter />
         <ResourceList resources={resources} /> */}
       </Layout>
