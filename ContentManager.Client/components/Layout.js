@@ -1,13 +1,15 @@
-import Navbar from 'components/Navbar';
-
 import React from 'react'
+import Navbar from 'components/Navbar';
+import Footer from "components/Footer";
 
-const Layout = ({children}) => {
+
+const Layout = ({ children }) => {
   return (
-    <>
-     <Navbar />
+    <div className="d-flex flex-column vh-100">
+      <Navbar />
       {children}
-    </>
+      <Footer />
+    </div>
   )
 }
 
