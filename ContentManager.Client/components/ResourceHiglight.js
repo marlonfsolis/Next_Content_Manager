@@ -23,6 +23,13 @@ export default function ResourceHiglight({ resources }) {
                   <div className="card-body text-dark">
                     <h5 className="card-title">{r.title}</h5>
                     <p className="card-text">{r.description}</p>
+                    <div className="d-grid gap-2 d-sm-block">
+                      <button className="btn btn-info col-sm-4"
+                        type="button"
+                        onClick={() => navigateTo("/resources/details")}>Details</button>
+                      <button className="btn btn-warning col-sm-4 ms-sm-2"
+                        type="button">Edit</button>
+                    </div>
                   </div>
                 </div>
               </div>
