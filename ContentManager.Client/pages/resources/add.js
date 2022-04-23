@@ -70,8 +70,8 @@ export default function AddResourcePage() {
 		min: { value: 1, message: "Please set a time greater than 1." },
 		max: { value: 1440, message: "Please select a time less than 1440." }
 	});
-	var linkRegister = register("link", { value: "http://my-link.com" });
-	var imageRegister = register("image", { value: "http://my-image.com" });
+	var linkRegister = register("resource_link", { value: "http://my-link.com" });
+	var imageRegister = register("imageUrl", { value: "http://my-image.com" });
 	var activeRegister = register("active");
 
 
@@ -159,12 +159,12 @@ export default function AddResourcePage() {
 					</Form.Group>
 				</Row>
 
-				<Form.Group as={Col} className="mb-3" controlId="link">
+				<Form.Group as={Col} className="mb-3" controlId="resource_link">
 					<Form.Label>Link</Form.Label>
 					<Form.Control type="text" placeholder="Link" {...linkRegister} />
 				</Form.Group>
 
-				<Form.Group as={Col} className=" mb-3" controlId="image">
+				<Form.Group as={Col} className=" mb-3" controlId="imageUrl">
 					<Form.Label>Image</Form.Label>
 					<Form.Control type="text" placeholder="Enter the url of the image" {...imageRegister} />
 				</Form.Group>
@@ -190,8 +190,6 @@ export default function AddResourcePage() {
 
 				<Form.Group as={Col} className="mb-3" controlId="timeToFinish">
 					<Form.Label>Time To Finish</Form.Label>
-					{/* <Form.Range min="0" max="1440" onChange={timeToFinish_ChangeHandler}
-						value={timeToFinish} /> */}
 					<Form.Range min="0" max="1440" {...timeToFinishRegister} />
 					<Form.Text>{timeToFinish} minutes</Form.Text>
 					<div>
