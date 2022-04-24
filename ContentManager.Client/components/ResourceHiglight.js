@@ -1,6 +1,8 @@
 import React from "react";
 import moment from 'moment';
 import { useRouter } from 'next/router';
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
 
 export default function ResourceHiglight({ resources }) {
   const router = useRouter();
@@ -9,20 +11,45 @@ export default function ResourceHiglight({ resources }) {
     router.push(path);
   };
 
-  const [showDeleteResourcePopup, setShowDeleteResourcePopup] = useState(false);
+  const [showDeleteResourcePopup, setShowDeleteResourcePopup] = React.useState(false);
+  const [deleteResourceId, setDeleteResourceId] = React.useState(false);
   const deleteResourcePopupClose = () => setShowDeleteResourcePopup(false);
-  const deleteResourcePopupShow = () => setShowDeleteResourcePopup(true);
+  const deleteResourcePopupShow = (resourceId) => {
+    setDeleteResourceId(resourceId);
+    setShowDeleteResourcePopup(true);
+  };
 
 
-  const deleteResource = (resourceId) => {
-    // console.log(resourceId);
+  const deleteResource = () => {
+    // console.log(deleteResourceId);
     
-    deleteResourcePopupShow(true);
-    
+    deleteResourcePopupClose();
+		fetch('http://localhost:5179/api/resources', {
+			method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
+			mode: 'cors', // no-cors, *cors, same-origin
+			cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+			credentials: 'same-origin', // include, *same-origin, omit
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			redirect: 'follow', // manual, *follow, error
+			referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+			body: JSON.stringify(data) // body data type must match "Content-Type" header
+		})
+			.then(() => {
+				setShowSuccessfulMsg(true);
+				reset();
+				console.log("Post complete");
+			})
+			.catch((error) => {
+				setShowFailMdsg(false);
+				console.log(error);
+			});
   };
 
   return (
     <>
+      {/* Cards */}
       <div className="d-flex flex-row flex-wrap justify-content-center">
         {
           resources.map((r) => {
@@ -45,7 +72,7 @@ export default function ResourceHiglight({ resources }) {
                       </button>
                       <button className="btn btn-danger col-sm-2"
                         type="button"
-                        onClick={() => deleteResource(r.resourceId)}>Delete
+                        onClick={() => deleteResourcePopupShow(r.resourceId)}>Delete
                       </button>
                     </div>
                   </div>
@@ -55,6 +82,25 @@ export default function ResourceHiglight({ resources }) {
           })
         }
       </div>
+
+      {/* Popup */}
+      <Modal
+        show={showDeleteResourcePopup}
+        onHide={deleteResourcePopupClose}
+        backdrop="static"
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Delete Resource</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete this Resource?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="danger" onClick={deleteResource}>Yes</Button>
+          <Button variant="primary" onClick={deleteResourcePopupClose}>No</Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }

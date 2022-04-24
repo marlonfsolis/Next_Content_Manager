@@ -110,7 +110,6 @@ export default function AddResourcePage() {
 				setShowFailMdsg(false);
 				console.log(error);
 			});
-
 	};
 
 
