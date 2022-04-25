@@ -1,5 +1,7 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
-@import "https://kendo.cdn.telerik.com/themes/5.0.1/bootstrap/bootstrap-main.css";
+@import "bootstrap-icons/font/bootstrap-icons.css";
+@import "react-toastify/dist/ReactToastify.min.css";
+/* @import "https://kendo.cdn.telerik.com/themes/5.0.1/bootstrap/bootstrap-main.css"; */
 
 .navbar a {
 	color: inherit;

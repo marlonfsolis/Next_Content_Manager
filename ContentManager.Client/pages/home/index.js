@@ -1,21 +1,57 @@
+import React from "react";
 import Layout from "components/Layout";
 import ResourceHiglight from "components/ResourceHiglight";
 import Newsletter from "components/Newsletter";
 import ResourceList from "components/ResourceList";
+import { toast } from "react-toastify";
 
-export default function Home({resources}) {
+
+export default function Home(props) {
+  
+  const [resources, setResources] = React.useState([].concat(props.resources));
+
+  const deleteResource = (resourceId) => {
+    console.log("Delete from Home with Id: ", resourceId);
+
+    const deleteUrl = `http://localhost:5179/api/resources/${resourceId}`;
+    fetch(deleteUrl, {
+      method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
+      mode: 'cors', // no-cors, *cors, same-origin
+      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: 'same-origin', // include, *same-origin, omit
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      redirect: 'follow', // manual, *follow, error
+      referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    })
+      .then(() => {
+        // setShowSuccessfulMsg(true);
+        const newResources = resources.filter((r) => r.resourceId != resourceId);
+        setResources(newResources);
+        toast.success("The resource was deleted successful!");
+        
+        console.log("Post complete");
+      })
+      .catch((error) => {
+        toast.error("Resource not deleted!");
+        console.log(error);
+      });
+  };
+  
   return (
     <>
+      
       <Layout>
         <section className="text-center mx-5">
           <h1 className="my-3">Resources</h1>
-          <ResourceHiglight resources={resources} />
-        </section>
-        
+          <ResourceHiglight resources={resources} deleteResource={deleteResource} />
+        </section>      
+
         {/* 
         <Newsletter />
         <ResourceList resources={resources} /> */}
-      </Layout>
+      </Layout>        
     </>
   );
 }

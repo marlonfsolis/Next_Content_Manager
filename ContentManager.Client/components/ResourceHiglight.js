@@ -4,13 +4,14 @@ import { useRouter } from 'next/router';
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 
-export default function ResourceHiglight({ resources }) {
+export default function ResourceHiglight({ resources, deleteResource }) {
   const router = useRouter();
 
   const navigateTo = (path) => {
     router.push(path);
   };
 
+  // Delete a resource
   const [showDeleteResourcePopup, setShowDeleteResourcePopup] = React.useState(false);
   const [deleteResourceId, setDeleteResourceId] = React.useState(false);
   const deleteResourcePopupClose = () => setShowDeleteResourcePopup(false);
@@ -18,33 +19,33 @@ export default function ResourceHiglight({ resources }) {
     setDeleteResourceId(resourceId);
     setShowDeleteResourcePopup(true);
   };
-
-
-  const deleteResource = () => {
+  const deleteResourcePopup = () => {
     // console.log(deleteResourceId);
-    
     deleteResourcePopupClose();
-		fetch('http://localhost:5179/api/resources', {
-			method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
-			mode: 'cors', // no-cors, *cors, same-origin
-			cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-			credentials: 'same-origin', // include, *same-origin, omit
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			redirect: 'follow', // manual, *follow, error
-			referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-			body: JSON.stringify(data) // body data type must match "Content-Type" header
-		})
-			.then(() => {
-				setShowSuccessfulMsg(true);
-				reset();
-				console.log("Post complete");
-			})
-			.catch((error) => {
-				setShowFailMdsg(false);
-				console.log(error);
-			});
+    deleteResource(deleteResourceId);
+
+
+    // const deleteUrl = `http://localhost:5179/api/resources/${deleteResourceId}`;
+    // fetch(deleteUrl, {
+    //   method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
+    //   mode: 'cors', // no-cors, *cors, same-origin
+    //   cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    //   credentials: 'same-origin', // include, *same-origin, omit
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   redirect: 'follow', // manual, *follow, error
+    //   referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    // })
+    //   .then(() => {
+    //     // setShowSuccessfulMsg(true);
+    //     router.replace("/home");
+    //     console.log("Post complete");
+    //   })
+    //   .catch((error) => {
+    //     // setShowFailMdsg(false);
+    //     console.log(error);
+    //   });
   };
 
   return (
@@ -97,7 +98,7 @@ export default function ResourceHiglight({ resources }) {
           Are you sure you want to delete this Resource?
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="danger" onClick={deleteResource}>Yes</Button>
+          <Button variant="danger" onClick={deleteResourcePopup}>Yes</Button>
           <Button variant="primary" onClick={deleteResourcePopupClose}>No</Button>
         </Modal.Footer>
       </Modal>
