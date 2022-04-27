@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Layout from "components/Layout";
+import Layout from "components/shared/Layout";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";

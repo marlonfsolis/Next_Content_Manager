@@ -1,4 +1,4 @@
-import Layout from "components/Layout";
+import Layout from "components/shared/Layout";
 import useSWR from "swr";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());

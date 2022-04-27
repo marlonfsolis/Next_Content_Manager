@@ -1,8 +1,8 @@
 import React from "react";
-import Layout from "components/Layout";
-import ResourceHiglight from "components/ResourceHiglight";
-import Newsletter from "components/Newsletter";
-import ResourceList from "components/ResourceList";
+import Layout from "components/shared/Layout";
+import ResourceHiglight from "components/home/ResourceHiglight";
+import Newsletter from "components/home/Newsletter";
+import ResourceList from "components/home/ResourceList";
 import { toast } from "react-toastify";
 
 
