@@ -7,8 +7,11 @@ import Button from "react-bootstrap/Button";
 export default function ResourceHiglight({ resources, deleteResource }) {
   const router = useRouter();
 
-  const navigateTo = (path) => {
-    router.push(path);
+  const navigateToDetails = (resourceId) => {
+    router.push({
+      pathname: "/resources/details",
+      query: { rid: resourceId }
+    });
   };
 
   // Delete a resource
@@ -43,7 +46,7 @@ export default function ResourceHiglight({ resources, deleteResource }) {
                     <div className="d-grid gap-2 d-sm-block">
                       <button className="btn btn-info col-sm-2"
                         type="button"
-                        onClick={() => navigateTo("/resources/details")}>Details
+                        onClick={() => navigateToDetails(r.resourceId)}>Details
                       </button>
                       <button className="btn btn-warning col-sm-2 mx-sm-2"
                         type="button">Edit
