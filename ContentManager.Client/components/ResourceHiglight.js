@@ -14,38 +14,15 @@ export default function ResourceHiglight({ resources, deleteResource }) {
   // Delete a resource
   const [showDeleteResourcePopup, setShowDeleteResourcePopup] = React.useState(false);
   const [deleteResourceId, setDeleteResourceId] = React.useState(false);
-  const deleteResourcePopupClose = () => setShowDeleteResourcePopup(false);
-  const deleteResourcePopupShow = (resourceId) => {
+  const closeDeleteResourcePopupFn = () => setShowDeleteResourcePopup(false);
+  const showDeleteResourcePopupFn = (resourceId) => {
     setDeleteResourceId(resourceId);
     setShowDeleteResourcePopup(true);
   };
   const deleteResourcePopup = () => {
     // console.log(deleteResourceId);
-    deleteResourcePopupClose();
+    closeDeleteResourcePopupFn();
     deleteResource(deleteResourceId);
-
-
-    // const deleteUrl = `http://localhost:5179/api/resources/${deleteResourceId}`;
-    // fetch(deleteUrl, {
-    //   method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
-    //   mode: 'cors', // no-cors, *cors, same-origin
-    //   cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-    //   credentials: 'same-origin', // include, *same-origin, omit
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    //   redirect: 'follow', // manual, *follow, error
-    //   referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    // })
-    //   .then(() => {
-    //     // setShowSuccessfulMsg(true);
-    //     router.replace("/home");
-    //     console.log("Post complete");
-    //   })
-    //   .catch((error) => {
-    //     // setShowFailMdsg(false);
-    //     console.log(error);
-    //   });
   };
 
   return (
@@ -73,7 +50,7 @@ export default function ResourceHiglight({ resources, deleteResource }) {
                       </button>
                       <button className="btn btn-danger col-sm-2"
                         type="button"
-                        onClick={() => deleteResourcePopupShow(r.resourceId)}>Delete
+                        onClick={() => showDeleteResourcePopupFn(r.resourceId)}>Delete
                       </button>
                     </div>
                   </div>
@@ -87,7 +64,7 @@ export default function ResourceHiglight({ resources, deleteResource }) {
       {/* Popup */}
       <Modal
         show={showDeleteResourcePopup}
-        onHide={deleteResourcePopupClose}
+        onHide={closeDeleteResourcePopupFn}
         backdrop="static"
         keyboard={false}
       >
@@ -99,7 +76,7 @@ export default function ResourceHiglight({ resources, deleteResource }) {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="danger" onClick={deleteResourcePopup}>Yes</Button>
-          <Button variant="primary" onClick={deleteResourcePopupClose}>No</Button>
+          <Button variant="primary" onClick={closeDeleteResourcePopupFn}>No</Button>
         </Modal.Footer>
       </Modal>
     </>

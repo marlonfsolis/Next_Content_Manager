@@ -26,7 +26,6 @@ export default function Home(props) {
       referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
     })
       .then(() => {
-        // setShowSuccessfulMsg(true);
         const newResources = resources.filter((r) => r.resourceId != resourceId);
         setResources(newResources);
         toast.success("The resource was deleted successful!");
