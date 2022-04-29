@@ -28,35 +28,29 @@ export default function DetailsResourcePage({ resource }) {
           </header>
 
           <section className="" id="main_content">
-
-
             <CardField title={"Title"} content={resource.title}></CardField>
-            <CardField title={"Description"} content={resource.description}></CardField>
-            <article>
-              <h5>Description</h5>
-              <p>Lorem dle from forthem si cao.</p>
-            </article>
-            <article>
-              <h5>Link</h5>
-              <p>Lorem dle from forthem si cao.</p>
-            </article>
-            <article>
-              <h5>Image</h5>
-              <p>Lorem dle from forthem si cao.</p>
-            </article>
+            <div className="py-1">
+              <CardField title={"Description"} content={resource.description}></CardField>
+            </div>
+            <div className="py-1">
+              <CardField title={"Link"} content={resource.link}></CardField>
+            </div>
+            <div className="py-1">
+              <CardField title={"Image"} content={resource.image}></CardField>
+            </div>
             <div className="d-flex flex-row">
-              <article>
-                <h5>Priority</h5>
-                <p>1</p>
-              </article>
-              <article>
-                <h5>Created At</h5>
-                <p><time>05/23/1983</time></p>
-              </article>
-              <article>
-                <h5>Time to Finish</h5>
-                <p><time>120 minutes</time></p>
-              </article>
+              <div className="pe-2 flex-fill">
+                <CardField title={"Priority"} content={resource.priority}></CardField>
+              </div>
+              <div className="px-2 flex-fill">
+                <CardField title={"Created At"} content={resource.createdAt}></CardField>
+              </div>
+              <div className="px-2 flex-fill">
+                <CardField title={"Time to Finish"} content={resource.timeToFinish}></CardField>
+              </div>
+              <div className="ps-2 flex-fill">
+                <CardField title={"Active"} content={resource.active ? "Yes" : "No"}></CardField>
+              </div>
             </div>
           </section>
         </div>
