@@ -1,4 +1,4 @@
-import Layout from "components/Layout";
+import Layout from "components/shared/Layout";
 import useSWR from "swr";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
@@ -19,15 +19,6 @@ export default function About() {
   return (
     <Layout>
       <div className="container">
-        {/* <section className="hero">
-          <div className="hero-body">
-            <p className="title">About Content Manager</p>
-            <p className="subtitle">An app to learn Next.js</p>
-            <p className="content">{data.message}</p>
-          </div>
-        </section> */}
-
-
         <section className="px-4 py-5 my-5 text-center">
           <h1 className="display-5 fw-bold">About Content Manager</h1>
           <div className="col-lg-6 mx-auto">
@@ -43,7 +34,6 @@ export default function About() {
             <p className="lead mb-4">Here we are using Hero snipped from <a href="https://getbootstrap.com/docs/5.0/examples/heroes/">Bootstrap Examples page</a>.</p>
           </div>
         </section>
-
       </div>
     </Layout >
   );
