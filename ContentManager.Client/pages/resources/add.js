@@ -6,6 +6,7 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from '@hookform/error-message';
+import { toast } from "react-toastify";
 
 export default function AddResourcePage() {
 
@@ -39,17 +40,6 @@ export default function AddResourcePage() {
 	const [showSuccessfulMsg, setShowSuccessfulMsg] = useState(false);
 	const [showFailMdsg, setShowFailMdsg] = useState(false);
 
-	useEffect(() => {
-		// addResource();
-	}, []);
-
-
-	const onSubmit = (dataItem) => {
-		addResource(dataItem);
-		// alert(JSON.stringify(dataItem, null, 2));
-	};
-
-
 	// Form rules definition
 	const errorMsgRenderFn = ({ message }) => <Form.Text className="text-danger">{message}</Form.Text>
 	var titleRegister = register("title", {
@@ -75,7 +65,22 @@ export default function AddResourcePage() {
 	var activeRegister = register("active");
 
 
-	const addResource = (data) => {
+	////////////////////////////////////////////////////////////////////////////////////
+	// Functions 
+	////////////////////////////////////////////////////////////////////////////////////
+
+
+	useEffect(() => {
+		// addResource();
+	}, []);
+
+
+	function onSubmit(dataItem) {
+		addResource(dataItem);
+		// alert(JSON.stringify(dataItem, null, 2));
+	}
+
+	async function addResource(data) {
 		// console.log(data);
 
 		// const data = {
@@ -89,6 +94,7 @@ export default function AddResourcePage() {
 		// 	createdAt: "2022-02-11"
 		// };
 
+
 		fetch('http://localhost:5179/api/resources', {
 			method: 'POST', // *GET, POST, PUT, DELETE, etc.
 			mode: 'cors', // no-cors, *cors, same-origin
@@ -101,21 +107,35 @@ export default function AddResourcePage() {
 			referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
 			body: JSON.stringify(data) // body data type must match "Content-Type" header
 		})
-			.then(() => {
+			.then(async (response) => {
+				const result = await response.json();
+				// console.log(result);
+
+				if (result?.error) {
+					toast.error(result.error.message);
+					return
+				}
+
 				setShowSuccessfulMsg(true);
+				toast.success("You just created a new Resource successfully!");
 				reset();
 				console.log("Post complete");
 			})
 			.catch((error) => {
 				setShowFailMdsg(false);
+				toast.error("Somthing went wrong. The Resource was not created!");
 				console.log(error);
 			});
 	};
 
 
+	////////////////////////////////////////////////////////////////////////////////////
+	// Content Output 
+	////////////////////////////////////////////////////////////////////////////////////
+
 	return (
 		<Layout>
-			{showSuccessfulMsg &&
+			{/* {showSuccessfulMsg &&
 				<div className="m-5">
 					<div className="alert alert-success alert-dismissible fade show" role="alert">
 						<strong>Well done!</strong> You just created a new Resource.
@@ -135,7 +155,7 @@ export default function AddResourcePage() {
 							onClick={() => setShowFailMdsg(false)}></button>
 					</div>
 				</div>
-			}
+			} */}
 
 			<Form className="col-8 mx-auto" onSubmit={handleSubmit(onSubmit)}>
 				<Row className="mb-5">
