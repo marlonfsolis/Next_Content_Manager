@@ -5,8 +5,9 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import { useForm } from "react-hook-form";
-import { ErrorMessage } from '@hookform/error-message';
+import { ErrorMessage } from "@hookform/error-message";
 import { toast } from "react-toastify";
+import axios from "../../axios";
 
 export default function AddResourcePage() {
 
@@ -94,27 +95,11 @@ export default function AddResourcePage() {
 		// 	createdAt: "2022-02-11"
 		// };
 
-
-		fetch('http://localhost:5179/api/resources', {
-			method: 'POST', // *GET, POST, PUT, DELETE, etc.
-			mode: 'cors', // no-cors, *cors, same-origin
-			cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-			credentials: 'same-origin', // include, *same-origin, omit
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			redirect: 'follow', // manual, *follow, error
-			referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-			body: JSON.stringify(data) // body data type must match "Content-Type" header
-		})
-			.then(async (response) => {
-				const result = await response.json();
+		axios
+			.post("resources", data)
+			.then((response) => {
+				const result = response.data;
 				// console.log(result);
-
-				if (result?.error) {
-					toast.error(result.error.message);
-					return
-				}
 
 				setShowSuccessfulMsg(true);
 				toast.success("You just created a new Resource successfully!");
@@ -124,8 +109,18 @@ export default function AddResourcePage() {
 			.catch((error) => {
 				setShowFailMdsg(false);
 				toast.error("Somthing went wrong. The Resource was not created!");
-				console.log(error);
+
+				if (error.response) {
+					const result = error.response.data;
+					console.log("Error:", result.error);
+					toast.error(result.error.message);
+				} else {
+					// Something happened in setting up the request that triggered an Error
+					console.log('Error', error.message);
+				}
 			});
+
+
 	};
 
 
