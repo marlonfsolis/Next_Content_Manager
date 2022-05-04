@@ -1,6 +1,8 @@
 import Layout from "components/shared/Layout";
 import Card from "react-bootstrap/Card";
 import { useRouter } from 'next/router';
+import { toast } from "react-toastify";
+import axios from "../../axios";
 
 export default function DetailsResourcePage({ resource }) {
   const router = useRouter();
@@ -65,31 +67,19 @@ export async function getServerSideProps(context) {
   const { rid } = context.query;
 
   try {
-
-    let response = {};
-    try {
-      response = await fetch(`http://localhost:5179/api/resources/${rid}`, {
-        method: "GET",
-        mode: 'cors', // no-cors, *cors, same-origin
-        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: 'same-origin', // include, *same-origin, omit
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-    } catch (error) {
-      console.log("Error getting the resource!");
-    }
-
-
-    const responseJson = await response.json();
-    if (responseJson?.error === null) {
-      data = responseJson.data;
-    } else {
-      console.log("Response Error: ", responseJson.error);
-    }
+    const response = await axios.get(`resources/${rid}`);
+    const result = response.data;
+    data = result.data;
   } catch (error) {
-    console.log("Unhandled Error: ", error);
+    toast.error("Somthing occurred while trying to read the resource!");
+
+    if (error.response) {
+      const result = error.response.data;
+      toast.error(result.error.message);
+    } else {
+      console.log(error.message);
+    }
+    console.log(error);
   }
 
   return {
