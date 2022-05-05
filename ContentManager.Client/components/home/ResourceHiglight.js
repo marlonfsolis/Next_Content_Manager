@@ -46,14 +46,15 @@ export default function ResourceHiglight({ resources, deleteResource }) {
                     <div className="d-grid gap-2 d-sm-block">
                       <button className="btn btn-info col-sm-2"
                         type="button"
-                        onClick={() => navigateToDetails(r.resourceId)}>Details
+                        onClick={() => navigateToDetails(r.resourceId)}> Details
                       </button>
                       <button className="btn btn-warning col-sm-2 mx-sm-2"
-                        type="button">Edit
+                        type="button"
+                        onClick={() => }> Edit
                       </button>
                       <button className="btn btn-danger col-sm-2"
                         type="button"
-                        onClick={() => showDeleteResourcePopupFn(r.resourceId)}>Delete
+                        onClick={() => showDeleteResourcePopupFn(r.resourceId)}> Delete
                       </button>
                     </div>
                   </div>
