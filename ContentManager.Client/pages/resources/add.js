@@ -95,31 +95,29 @@ export default function AddResourcePage() {
 		// 	createdAt: "2022-02-11"
 		// };
 
-		axios
-			.post("resources", data)
-			.then((response) => {
-				const result = response.data;
-				// console.log(result);
+		try {
+			const response = await axios.post("resources", data);
+			const result = response.data;
+			// console.log(result);
 
-				setShowSuccessfulMsg(true);
-				toast.success("You just created a new Resource successfully!");
-				reset();
-				console.log("Post complete");
-			})
-			.catch((error) => {
-				setShowFailMdsg(false);
-				toast.error("Somthing went wrong. The Resource was not created!");
+			setShowSuccessfulMsg(true);
+			toast.success("You just created a new Resource successfully!");
+			reset();
+			console.log("Post complete");
 
-				if (error.response) {
-					const result = error.response.data;
-					console.log("Error:", result.error);
-					toast.error(result.error.message);
-				} else {
-					// Something happened in setting up the request that triggered an Error
-					console.log('Error', error.message);
-				}
-			});
+		} catch (error) {
+			setShowFailMdsg(false);
+			toast.error("Somthing went wrong. The Resource was not created!");
 
+			if (error.response) {
+				const result = error.response.data;
+				console.log("Error:", result.error);
+				toast.error(result.error.message);
+			} else {
+				// Something happened in setting up the request that triggered an Error
+				console.log('Error', error.message);
+			}
+		}
 
 	};
 
