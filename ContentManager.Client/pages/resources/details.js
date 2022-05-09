@@ -1,6 +1,6 @@
 import Layout from "components/shared/Layout";
 import Card from "react-bootstrap/Card";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import axios from "../../axios";
 

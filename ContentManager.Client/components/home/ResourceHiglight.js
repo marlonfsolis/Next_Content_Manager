@@ -7,9 +7,21 @@ import Button from "react-bootstrap/Button";
 export default function ResourceHiglight({ resources, deleteResource }) {
   const router = useRouter();
 
+
+  ////////////////////////////////////////////////////////////////////////////////////
+  // Functions 
+  ////////////////////////////////////////////////////////////////////////////////////
+
   const navigateToDetails = (resourceId) => {
     router.push({
       pathname: "/resources/details",
+      query: { rid: resourceId }
+    });
+  };
+
+  const navigateToEdit = (resourceId) => {
+    router.push({
+      pathname: "/resources/edit",
       query: { rid: resourceId }
     });
   };
@@ -27,6 +39,12 @@ export default function ResourceHiglight({ resources, deleteResource }) {
     closeDeleteResourcePopupFn();
     deleteResource(deleteResourceId);
   };
+
+
+
+  ////////////////////////////////////////////////////////////////////////////////////
+  // Content Output 
+  ////////////////////////////////////////////////////////////////////////////////////
 
   return (
     <>
@@ -50,7 +68,7 @@ export default function ResourceHiglight({ resources, deleteResource }) {
                       </button>
                       <button className="btn btn-warning col-sm-2 mx-sm-2"
                         type="button"
-                        onClick={() => }> Edit
+                        onClick={() => navigateToEdit(r.resourceId)}> Edit
                       </button>
                       <button className="btn btn-danger col-sm-2"
                         type="button"
