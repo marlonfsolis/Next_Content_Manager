@@ -21,7 +21,7 @@
 			"type": "node-terminal",
 			"request": "launch",
 			"command": "npm run dev",
-			"console": "integratedTerminal",
+			// "console": "integratedTerminal",
 			"serverReadyAction": {
 				"pattern": "started server on .+, url: (https?://.+)",
 				"uriFormat": "http://localhost:%s",
