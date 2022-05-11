@@ -83,27 +83,28 @@ namespace ContentManager.API.DAL
             var errorLogId = 0;
             Error? error = null;
 
+            var r = createResourceRP;
             var dbPath = ConnectionString.ContentManagerDB;
             using (var conn = new SqlConnection(dbPath))
             {
-                var dynParams = new DynamicParameters();
-                dynParams.Add("@title", createResourceRP.Title);
-                dynParams.Add("@description", createResourceRP.Description);
-                dynParams.Add("@link", createResourceRP.Resource_Link);
-                dynParams.Add("@imageUrl", createResourceRP.ImageUrl);
-                dynParams.Add("@priority", createResourceRP.Priority);
-                dynParams.Add("@timeToFinish", createResourceRP.TimeToFinish);
-                dynParams.Add("@active", createResourceRP.Active);
-                dynParams.Add("@createdAt", createResourceRP.CreatedAt);
-                dynParams.Add("@errorCode", errorCode, direction: ParameterDirection.Output);
-                dynParams.Add("@errorLogId", errorLogId, direction: ParameterDirection.Output);
+                var p = new DynamicParameters();
+                p.Add("@title", r.Title);
+                p.Add("@description", r.Description);
+                p.Add("@link", r.Resource_Link);
+                p.Add("@imageUrl", r.ImageUrl);
+                p.Add("@priority", r.Priority);
+                p.Add("@timeToFinish", r.TimeToFinish);
+                p.Add("@active", r.Active);
+                p.Add("@createdAt", r.CreatedAt);
+                p.Add("@errorCode", errorCode, direction: ParameterDirection.Output);
+                p.Add("@errorLogId", errorLogId, direction: ParameterDirection.Output);
 
                 var sql = "sp_Resource_Create";
                 var result = await conn
-                    .QueryFirstOrDefaultAsync<Resource>(sql, dynParams, commandType: CommandType.StoredProcedure);
+                    .QueryFirstOrDefaultAsync<Resource>(sql, p, commandType: CommandType.StoredProcedure);
 
-                errorCode = dynParams.Get<string>("@errorCode");
-                errorLogId = dynParams.Get<int>("@errorLogId");
+                errorCode = p.Get<string>("@errorCode");
+                errorLogId = p.Get<int>("@errorLogId");
                 if (errorCode != "")
                 {
                     error = new Error(errorCode, errorLogId);
@@ -133,6 +134,44 @@ namespace ContentManager.API.DAL
 
                 errorCode = dynParams.Get<string>("@errorCode");
                 errorLogId = dynParams.Get<int>("@errorLogId");
+                if (errorCode != "")
+                {
+                    error = new Error(errorCode, errorLogId);
+                }
+
+                return new Tuple<Error?, Resource?>(error, result);
+            }
+        }
+
+        public async Task<Tuple<Error?, Resource?>> UpdateResource(UpdateResourceRP updateResourceRP)
+        {
+            var errorCode = "";
+            var errorLogId = 0;
+            Error? error = null;
+
+            var r = updateResourceRP;
+            var dbPath = ConnectionString.ContentManagerDB;
+            using (var conn = new SqlConnection(dbPath))
+            {
+                var p = new DynamicParameters();
+                p.Add("@resourceId", r.ResourceId);
+                p.Add("@title", r.Title);
+                p.Add("@description", r.Description);
+                p.Add("@link", r.Resource_Link);
+                p.Add("@imageUrl", r.ImageUrl);
+                p.Add("@priority", r.Priority);
+                p.Add("@timeToFinish", r.TimeToFinish);
+                p.Add("@active", r.Active);
+                p.Add("@createdAt", r.CreatedAt);
+                p.Add("@errorCode", errorCode, direction: ParameterDirection.Output);
+                p.Add("@errorLogId", errorLogId, direction: ParameterDirection.Output);
+
+                var sql = "sp_Resource_Update";
+                var result = await conn
+                    .QueryFirstOrDefaultAsync<Resource>(sql, p, commandType: CommandType.StoredProcedure);
+
+                errorCode = p.Get<string>("@errorCode");
+                errorLogId = p.Get<int>("@errorLogId");
                 if (errorCode != "")
                 {
                     error = new Error(errorCode, errorLogId);

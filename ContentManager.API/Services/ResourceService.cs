@@ -111,5 +111,25 @@ namespace ContentManager.API.Services
 
             return new Tuple<Error?, Resource?>(error, resource);
         }
+
+        public async Task<Tuple<Error?, Resource?>> UpdateResource(UpdateResourceRP updateResourceRP)
+        {
+            var tuple = await ResourceDAL.UpdateResource(updateResourceRP);
+            var error = tuple.Item1;
+            var resource = tuple.Item2;
+
+            switch (error?.Code)
+            {
+                case "500":
+                    error.SetErrorResponseValues(StatusCodes.Status500InternalServerError, "Database error on sp_Resource_Create");
+                    break;
+                case "401":
+                    var value = new { title = updateResourceRP.Title };
+                    error.SetErrorResponseValues(StatusCodes.Status400BadRequest, "Resource already exist with this title", value);
+                    break;
+            }
+
+            return new Tuple<Error?, Resource?>(error, resource);
+        }
     }
 }

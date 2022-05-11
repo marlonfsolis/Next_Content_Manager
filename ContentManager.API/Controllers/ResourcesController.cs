@@ -128,5 +128,30 @@ namespace ContentManager.API.Controllers
 
             return Ok(result);
         }
+
+        [HttpPut]
+        [Route("", Name = "UpdateResource")]
+        public async Task<ActionResult<Result<Resource>>> UpdateResource([FromBody] UpdateResourceRP updateResourceRP)
+        {
+            var tuple = await ResourceService.CreateResource(updateResourceRP);
+            var error = tuple.Item1;
+            var resource = tuple.Item2;
+
+            var result = new Result<Resource?>(resource, error);
+            LinkService.GenLink("CreateResource", result);
+
+            if (error != null)
+            {
+                return StatusCode(error.StatusCode, result);
+            }
+
+            var routeValues = new Dictionary<string, object>()
+            {
+                { "resourceId", resource != null ? resource.ResourceId : 0 }
+            };
+            LinkService.GenLink("GetResource", resource, routeValues);
+
+            return Ok(result);
+        }
     }
 }

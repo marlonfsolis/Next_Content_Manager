@@ -67,8 +67,12 @@ export default function Edit(props) {
   ////////////////////////////////////////////////////////////////////////////////////
 
   function onSubmit(dataItem) {
-    // addResource(dataItem);
-    alert(JSON.stringify(dataItem, null, 2));
+    saveResourceChanges(dataItem);
+    // alert(JSON.stringify(dataItem, null, 2));
+  }
+
+  async function updateResource(resource) {
+    axios.put
   }
 
 

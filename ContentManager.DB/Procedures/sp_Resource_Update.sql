@@ -33,18 +33,17 @@ BEGIN TRY
 
     INSERT INTO @LogMessage VALUES (@ProcedureName+' START', GETDATE())
 
-	INSERT INTO @LogMessage VALUES ('ParameterList:' +
-									'@resourceId: ' + ISNULL(CAST(@resourceId AS VARCHAR), 'NULL') + ' || ' +
-									'@title: ' + ISNULL(CAST(@title AS VARCHAR), 'NULL') + ' || ' +
-									'@description: ' + ISNULL(CAST(@description AS VARCHAR), 'NULL') + ' || ' +
-									'@link: ' + ISNULL(CAST(@link AS VARCHAR), 'NULL') + ' || ' +
-									'@imageUrl: ' + ISNULL(CAST(@imageUrl AS VARCHAR), 'NULL') + ' || ' +
-									'@priority: ' + ISNULL(CAST(@priority AS VARCHAR), 'NULL') + ' || ' +
-									'@timeToFinish: ' + ISNULL(CAST(@timeToFinish AS VARCHAR), 'NULL') + ' || ' +
-									'@active: ' + ISNULL(CAST(@active AS VARCHAR), 'NULL') + ' || ' +
-									'@createdAt: ' + ISNULL(CAST(@createdAt AS VARCHAR), 'NULL') + ' || ' +
-									'ProfileId: ' + ISNULL(CAST(0 AS VARCHAR), 'NULL')
-									, GETDATE())
+	INSERT INTO @LogMessage VALUES ('ParameterList:', GETDATE())
+	INSERT INTO @LogMessage VALUES ('@resourceId: ' + ISNULL(CAST(@resourceId AS VARCHAR), 'NULL'), GETDATE())
+	INSERT INTO @LogMessage VALUES ('@title: ' + ISNULL(CAST(@title AS VARCHAR), 'NULL'), GETDATE())
+	INSERT INTO @LogMessage VALUES ('@description: ' + ISNULL(CAST(@description AS VARCHAR), 'NULL'), GETDATE())
+	INSERT INTO @LogMessage VALUES ('@link: ' + ISNULL(CAST(@link AS VARCHAR), 'NULL'), GETDATE())
+	INSERT INTO @LogMessage VALUES ('@imageUrl: ' + ISNULL(CAST(@imageUrl AS VARCHAR), 'NULL'), GETDATE())
+	INSERT INTO @LogMessage VALUES ('@priority: ' + ISNULL(CAST(@priority AS VARCHAR), 'NULL'), GETDATE())
+	INSERT INTO @LogMessage VALUES ('@timeToFinish: ' + ISNULL(CAST(@timeToFinish AS VARCHAR), 'NULL'), GETDATE())
+	INSERT INTO @LogMessage VALUES ('@active: ' + ISNULL(CAST(@active AS VARCHAR), 'NULL'), GETDATE())
+	INSERT INTO @LogMessage VALUES ('@createdAt: ' + ISNULL(CAST(@createdAt AS VARCHAR), 'NULL'), GETDATE())
+	INSERT INTO @LogMessage VALUES ('ProfileId: ' + ISNULL(CAST(0 AS VARCHAR), 'NULL'), GETDATE())
     
 
 
@@ -80,10 +79,10 @@ BEGIN TRY
 
 	UPDATE Resource 
 	SET Title = @title
-	   ,Description = @description
+	   ,[Description] = @description
 	   ,Link = @link
 	   ,ImageUrl = @imageUrl
-	   ,Priority = @priority
+	   ,[Priority] = @priority
 	   ,TimeToFinish = @timeToFinish
 	   ,Active = @active
 	   ,CreatedAt = @createdAt
@@ -95,6 +94,22 @@ BEGIN TRY
 	BEGIN
 		COMMIT TRANSACTION @ProcedureName		
 	END
+
+
+
+	-- Return new resource created
+	SELECT
+		r.ResourceId
+	   ,r.Title
+	   ,r.[Description]
+	   ,r.Link
+	   ,r.ImageUrl
+	   ,r.[Priority]
+	   ,r.TimeToFinish
+	   ,r.Active
+	   ,r.CreatedAt
+	FROM Resource r
+	WHERE r.ResourceId = @resourceId
 
 END TRY
 

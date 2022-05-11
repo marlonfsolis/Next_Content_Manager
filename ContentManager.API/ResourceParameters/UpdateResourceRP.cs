@@ -2,8 +2,9 @@
 
 namespace ContentManager.API.ResourceParameters
 {
-    public class CreateResourceRP : IResourceBase
+    public class UpdateResourceRP : IResourceBase
     {
+        public int ResourceId { get; set; }
         public string Title { get; set; } = "";
         public string Description { get; set; } = "";
         public string Resource_Link { get; set; } = "";
