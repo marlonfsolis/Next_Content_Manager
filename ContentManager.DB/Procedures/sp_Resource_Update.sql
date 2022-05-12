@@ -80,7 +80,7 @@ BEGIN TRY
 	UPDATE Resource 
 	SET Title = @title
 	   ,[Description] = @description
-	   ,Link = @link
+	   ,Resource_Link = @link
 	   ,ImageUrl = @imageUrl
 	   ,[Priority] = @priority
 	   ,TimeToFinish = @timeToFinish
@@ -102,7 +102,7 @@ BEGIN TRY
 		r.ResourceId
 	   ,r.Title
 	   ,r.[Description]
-	   ,r.Link
+	   ,r.Resource_Link
 	   ,r.ImageUrl
 	   ,r.[Priority]
 	   ,r.TimeToFinish

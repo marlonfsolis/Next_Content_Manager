@@ -121,7 +121,7 @@ namespace ContentManager.API.Services
             switch (error?.Code)
             {
                 case "500":
-                    error.SetErrorResponseValues(StatusCodes.Status500InternalServerError, "Database error on sp_Resource_Create");
+                    error.SetErrorResponseValues(StatusCodes.Status500InternalServerError, "Database error on sp_Resource_Update");
                     break;
                 case "401":
                     var value = new { title = updateResourceRP.Title };

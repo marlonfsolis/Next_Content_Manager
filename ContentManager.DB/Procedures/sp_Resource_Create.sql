@@ -76,7 +76,7 @@ BEGIN TRY
 	END
 
 
-	INSERT INTO Resource (Title, Description, Link, ImageUrl, Priority, TimeToFinish, Active, CreatedAt)
+	INSERT INTO Resource (Title, Description, Resource_Link, ImageUrl, Priority, TimeToFinish, Active, CreatedAt)
 	VALUES (@title, @description, @link, @imageUrl, @priority, @timeToFinish, @active, @createdAt);
 
 	SELECT @newResource = SCOPE_IDENTITY()
@@ -93,7 +93,7 @@ BEGIN TRY
 		r.ResourceId
 	   ,r.Title
 	   ,r.Description
-	   ,r.Link
+	   ,r.Resource_Link
 	   ,r.ImageUrl
 	   ,r.Priority
 	   ,r.TimeToFinish

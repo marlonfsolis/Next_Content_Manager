@@ -154,7 +154,7 @@ BEGIN TRY
 		r.ResourceId
 	   ,r.Title
 	   ,r.Description
-	   ,r.Link
+	   ,r.Resource_Link
 	   ,r.ImageUrl
 	   ,r.Priority
 	   ,r.TimeToFinish
@@ -165,7 +165,7 @@ BEGIN TRY
 	-- filter
 	WHERE (@title_filter IS NULL OR r.Title = @title_filter)
 	AND (@description_filter IS NULL OR r.Description = @description_filter)
-	AND (@link_filter IS NULL OR r.Link = @link_filter)
+	AND (@link_filter IS NULL OR r.Resource_Link = @link_filter)
 	AND (@imageUrl_filter IS NULL OR r.ImageUrl = @imageUrl_filter)
 	AND (@priority_filter IS NULL OR r.Priority = @priority_filter)
 	AND (@timeToFinish_filter IS NULL OR r.TimeToFinish = @timeToFinish_filter)
@@ -175,7 +175,7 @@ BEGIN TRY
 	-- search
 	AND (@title_search IS NULL OR r.Title LIKE @title_search)
 	AND (@description_search IS NULL OR r.Description LIKE @description_search)
-	AND (@link_search IS NULL OR r.Link LIKE @link_search)
+	AND (@link_search IS NULL OR r.Resource_Link LIKE @link_search)
 	AND (@imageUrl_search IS NULL OR r.ImageUrl LIKE @imageUrl_search)
 	AND (@priority_search IS NULL OR r.Priority LIKE @priority_search)
 	AND (@timeToFinish_search IS NULL OR r.TimeToFinish LIKE @timeToFinish_search)

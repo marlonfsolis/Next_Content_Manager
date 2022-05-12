@@ -61,7 +61,7 @@ BEGIN TRY
 		r.ResourceId
 	   ,r.Title
 	   ,r.Description
-	   ,r.Link
+	   ,r.Resource_Link
 	   ,r.ImageUrl
 	   ,r.Priority
 	   ,r.TimeToFinish

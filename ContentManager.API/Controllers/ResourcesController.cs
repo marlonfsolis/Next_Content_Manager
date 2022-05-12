@@ -133,12 +133,12 @@ namespace ContentManager.API.Controllers
         [Route("", Name = "UpdateResource")]
         public async Task<ActionResult<Result<Resource>>> UpdateResource([FromBody] UpdateResourceRP updateResourceRP)
         {
-            var tuple = await ResourceService.CreateResource(updateResourceRP);
+            var tuple = await ResourceService.UpdateResource(updateResourceRP);
             var error = tuple.Item1;
             var resource = tuple.Item2;
 
             var result = new Result<Resource?>(resource, error);
-            LinkService.GenLink("CreateResource", result);
+            LinkService.GenLink("UpdateResource", result);
 
             if (error != null)
             {
