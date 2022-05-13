@@ -35,7 +35,7 @@ export default function DetailsResourcePage({ resource }) {
               <CardField title={"Description"} content={resource.description}></CardField>
             </div>
             <div className="py-1">
-              <CardField title={"Link"} content={resource.link}></CardField>
+              <CardField title={"Link"} content={resource.resource_Link}></CardField>
             </div>
             <div className="py-1">
               <CardField title={"Image"} content={resource.image}></CardField>

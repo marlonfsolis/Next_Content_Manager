@@ -61,7 +61,7 @@ export default function AddResourcePage() {
 		min: { value: 1, message: "Please set a time greater than 1." },
 		max: { value: 1440, message: "Please select a time less than 1440." }
 	});
-	var linkRegister = register("resource_link", { value: "http://my-link.com" });
+	var linkRegister = register("resource_Link", { value: "http://my-link.com" });
 	var imageRegister = register("imageUrl", { value: "http://my-image.com" });
 	var activeRegister = register("active");
 
@@ -171,7 +171,7 @@ export default function AddResourcePage() {
 					</Form.Group>
 				</Row>
 
-				<Form.Group as={Col} className="mb-3" controlId="resource_link">
+				<Form.Group as={Col} className="mb-3" controlId="resource_Link">
 					<Form.Label>Link</Form.Label>
 					<Form.Control type="text" placeholder="Link" {...linkRegister} />
 				</Form.Group>

@@ -18,15 +18,17 @@ export default function Edit(props) {
   ////////////////////////////////////////////////////////////////////////////////////
   // Form setup 
   ////////////////////////////////////////////////////////////////////////////////////
+
   const formDefaultValues = {
+    resourceId: resource?.resourceId,
     title: resource?.title,
     description: resource?.description,
-    resource_link: resource?.resource_link,
+    resource_Link: resource?.resource_Link,
     imageUrl: resource?.imageUrl,
     priority: resource?.priority,
     timeToFinish: resource?.timeToFinish,
     active: resource?.active,
-    createdAt: moment(resource.createdAt).format("YYYY-MM-DD")
+    createdAt: moment(resource?.createdAt).format("YYYY-MM-DD")
   };
 
   const { register, handleSubmit, watch, reset, formState: { errors, isSubmitSuccessful } } = useForm({
@@ -38,6 +40,7 @@ export default function Edit(props) {
 
   // Form rules definition
   const errorMsgRenderFn = ({ message }) => <Form.Text className="text-danger">{message}</Form.Text>
+  var resourceIdRegiste = register("resourceId");
   var titleRegister = register("title", {
     required: "Title is required.",
     minLength: { value: 4, message: "Title must be greater then 4 characters." }
@@ -56,7 +59,7 @@ export default function Edit(props) {
     min: { value: 1, message: "Please set a time greater than 1." },
     max: { value: 1440, message: "Please select a time less than 1440." }
   });
-  var linkRegister = register("resource_link", { value: "http://my-link.com" });
+  var linkRegister = register("resource_Link", { value: "http://my-link.com" });
   var imageRegister = register("imageUrl", { value: "http://my-image.com" });
   var activeRegister = register("active");
 
@@ -67,12 +70,32 @@ export default function Edit(props) {
   ////////////////////////////////////////////////////////////////////////////////////
 
   function onSubmit(dataItem) {
-    saveResourceChanges(dataItem);
+    updateResource(dataItem);
     // alert(JSON.stringify(dataItem, null, 2));
   }
 
   async function updateResource(resource) {
-    axios.put
+    try {
+      const response = await axios.put("resources", resource);
+      const result = response.data;
+      // console.log(result);
+
+      toast.success("You just updated the Resource successfully!");
+      console.log("Post complete");
+
+    } catch (error) {
+      toast.error("Somthing went wrong. The Resource was not created!");
+
+      if (error.response) {
+        const result = error.response.data;
+        console.log("Error:", result.error);
+        toast.error(result.error.message);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log('Error', error.message);
+      }
+    }
+
   }
 
 
@@ -88,6 +111,8 @@ export default function Edit(props) {
           </Col>
         </Row>
 
+        <input type="hidden" id="resourceId" {...resourceIdRegiste} />
+
         <Row className="mb-3">
           <Form.Group as={Col} controlId="title">
             <Form.Label>Title</Form.Label>
@@ -102,7 +127,7 @@ export default function Edit(props) {
           </Form.Group>
         </Row>
 
-        <Form.Group as={Col} className="mb-3" controlId="resource_link">
+        <Form.Group as={Col} className="mb-3" controlId="resource_Link">
           <Form.Label>Link</Form.Label>
           <Form.Control type="text" placeholder="Link" {...linkRegister} />
         </Form.Group>
